@@ -1,0 +1,100 @@
+<section class="panel">
+  <div class="toolbar">
+    <div>
+      <div class="eyebrow">{{ 'properties.eyebrow' | translate }}</div>
+      <h2>{{ (mode === 'create' ? 'propertyForm.addTitle' : 'propertyForm.editTitle') | translate }}</h2>
+      <p class="muted">{{ 'propertyForm.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="error-box">{{ error }}</div>
+
+  <div *ngIf="loading && mode === 'edit'" class="skeleton-stack">
+    <div class="form-grid">
+      <div class="skeleton skeleton-field" *ngFor="let item of [1, 2, 3, 4, 5, 6, 7, 8]"></div>
+    </div>
+    <div class="skeleton skeleton-field"></div>
+    <div class="skeleton skeleton-field"></div>
+  </div>
+
+  <form *ngIf="!loading || mode === 'create'" [formGroup]="form" (ngSubmit)="submit()" class="stack">
+    <div class="form-grid">
+      <div><label class="label">{{ 'fields.title' | translate }}</label><input formControlName="title"></div>
+      <div><label class="label">{{ 'fields.price' | translate }}</label><input type="number" formControlName="price"></div>
+      <div><label class="label">{{ 'fields.type' | translate }}</label><app-ui-dropdown formControlName="type" [options]="typeOptions" /></div>
+      <div><label class="label">{{ 'fields.purpose' | translate }}</label><app-ui-dropdown formControlName="purpose" [options]="purposeOptions" /></div>
+      <div><label class="label">{{ 'fields.source' | translate }}</label><app-ui-dropdown formControlName="source" [options]="sourceOptions" /></div>
+      <div><label class="label">{{ 'fields.currency' | translate }}</label><app-ui-dropdown formControlName="currency" [options]="currencyOptions" /></div>
+      <div formGroupName="location"><label class="label">{{ 'fields.country' | translate }}</label><input formControlName="country"></div>
+      <div formGroupName="location"><label class="label">{{ 'fields.city' | translate }}</label><input formControlName="city"></div>
+      <div formGroupName="location"><label class="label">{{ 'fields.area' | translate }}</label><input formControlName="area"></div>
+      <div formGroupName="location"><label class="label">{{ 'fields.address' | translate }}</label><input formControlName="address"></div>
+      <div><label class="label">{{ 'fields.bedrooms' | translate }}</label><input type="number" formControlName="bedrooms"></div>
+      <div><label class="label">{{ 'fields.bathrooms' | translate }}</label><input type="number" formControlName="bathrooms"></div>
+      <div><label class="label">{{ 'fields.areaSqm' | translate }}</label><input type="number" formControlName="areaSqm"></div>
+      <div><label class="label">{{ 'fields.floor' | translate }}</label><input type="number" formControlName="floor"></div>
+      <div><label class="label">{{ 'fields.ownerName' | translate }}</label><app-ui-dropdown formControlName="ownerId" [options]="ownerOptions" /></div>
+    </div>
+
+    <div><label class="label">{{ 'fields.description' | translate }}</label><textarea formControlName="description"></textarea></div>
+    <div><label class="label">{{ 'fields.amenitiesCsv' | translate }}</label><input formControlName="amenitiesText"></div>
+    <div class="checkbox-grid">
+      <label class="checkbox-item" *ngFor="let amenity of commonAmenities">
+        <input type="checkbox" [checked]="hasAmenity(amenity)" (change)="addAmenity(amenity, $any($event.target).checked)">
+        <span>{{ 'amenities.' + amenity | translate }}</span>
+      </label>
+    </div>
+    <div class="images-upload">
+      <label class="label">{{ 'fields.imagesText' | translate }}</label>
+      <label class="btn-secondary upload-button">
+        Choose images from files
+        <input type="file" accept="image/*" multiple hidden (change)="chooseImages($event)">
+      </label>
+    </div>
+
+    <div class="upload-preview-grid" *ngIf="selectedImagePreviews.length">
+      <article class="upload-image-card" *ngFor="let image of selectedImagePreviews; let imageIndex = index">
+        <div class="cover-banner" *ngIf="selectedCoverImageIndex === imageIndex">Current cover photo</div>
+        <img [src]="image.previewUrl" [alt]="image.fileName">
+        <div class="image-card-actions">
+          <button
+            type="button"
+            class="btn-secondary"
+            (click)="setSelectedCover(imageIndex)"
+            [disabled]="selectedCoverImageIndex === imageIndex"
+          >
+            {{ selectedCoverImageIndex === imageIndex ? 'Cover selected' : 'Set as cover' }}
+          </button>
+          <button type="button" class="btn-danger" (click)="removeSelectedImage(imageIndex)">Remove image</button>
+        </div>
+      </article>
+    </div>
+
+    <div class="existing-images" *ngIf="existingImages.length">
+      <article class="existing-image-card" *ngFor="let image of existingImages">
+        <div class="cover-banner" *ngIf="coverImage === image">Current cover photo</div>
+        <img [src]="image" [alt]="form.controls.title.value || 'Property image'">
+        <div class="image-card-actions">
+          <button
+            type="button"
+            class="btn-secondary"
+            (click)="setExistingCover(image)"
+            [disabled]="coverImage === image"
+          >
+            {{ coverImage === image ? 'Cover selected' : 'Set as cover' }}
+          </button>
+          <button type="button" class="btn-danger" (click)="removeExistingImage(image)">Remove image</button>
+        </div>
+      </article>
+    </div>
+
+    <div class="checkbox-grid">
+      <label class="checkbox-item"><input type="checkbox" formControlName="parking"><span>{{ 'fields.parking' | translate }}</span></label>
+      <label class="checkbox-item"><input type="checkbox" formControlName="furnished"><span>{{ 'fields.furnished' | translate }}</span></label>
+    </div>
+
+    <div class="toolbar">
+      <button type="submit" class="btn" [disabled]="loading">{{ loading ? ('common.saving' | translate) : ((mode === 'create' ? 'propertyForm.createButton' : 'common.saveChanges') | translate) }}</button>
+    </div>
+  </form>
+</section>

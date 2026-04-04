@@ -1,0 +1,74 @@
+<section class="panel hero">
+  <div class="toolbar">
+    <div>
+      <div class="eyebrow">{{ 'requests.eyebrow' | translate }}</div>
+      <h2>{{ 'requests.title' | translate }}</h2>
+      <p class="muted">{{ 'requests.subtitle' | translate }}</p>
+    </div>
+    <a routerLink="/requests/new" class="btn">{{ 'requests.addRequest' | translate }}</a>
+  </div>
+</section>
+
+<section class="panel">
+  <label class="label">{{ 'requests.filterCustomer' | translate }}</label>
+  <app-ui-dropdown [formControl]="form.controls.customerId" [options]="customerOptions" />
+</section>
+
+<section *ngIf="error" class="error-box">{{ error }}</section>
+<section *ngIf="loading" class="stack">
+  <article class="panel skeleton-stack" *ngFor="let item of [1, 2, 3, 4]">
+    <div class="skeleton skeleton-chip"></div>
+    <div class="skeleton skeleton-title"></div>
+    <div class="skeleton skeleton-text"></div>
+    <div class="skeleton-row">
+      <div class="skeleton skeleton-chip"></div>
+      <div class="skeleton skeleton-chip"></div>
+      <div class="skeleton skeleton-chip"></div>
+    </div>
+  </article>
+</section>
+
+<section *ngIf="!loading" class="stack">
+  <article class="panel" *ngFor="let request of requests">
+    <div class="toolbar match-actions">
+      <div>
+        <div class="eyebrow">{{ 'propertyPurpose.' + request.purpose | translate }} / {{ 'propertyType.' + request.requestType | translate }}</div>
+        <h3>{{ customerName(request.customerId) }}</h3>
+        <p class="muted">{{ locationSummary(request) }}</p>
+      </div>
+      <div class="toolbar">
+        <a [routerLink]="['/requests', request.id, 'edit']" class="btn-secondary">{{ 'common.edit' | translate }}</a>
+        <button type="button" class="btn-danger" (click)="deleteRequest(request.id)">{{ 'common.delete' | translate }}</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <span class="pill" *ngIf="request.minPrice !== undefined">{{ 'fields.minPrice' | translate }} {{ request.minPrice }}</span>
+      <span class="pill" *ngIf="request.maxPrice !== undefined">{{ 'fields.maxPrice' | translate }} {{ request.maxPrice }}</span>
+      <span class="pill" *ngIf="request.minBedrooms !== undefined">{{ request.minBedrooms }}+ {{ 'units.bedrooms' | translate }}</span>
+      <span class="pill" *ngFor="let amenity of request.mustHaveAmenities || []">{{ 'amenities.' + amenity | translate }}</span>
+    </div>
+
+    <div class="toolbar">
+      <button type="button" class="btn" (click)="findMatches(request.id)" [disabled]="matchingRequestId === request.id">
+        {{ (matchingRequestId === request.id ? 'requests.findingMatches' : 'requests.findMatches') | translate }}
+      </button>
+    </div>
+
+    <div *ngIf="matchesByRequestId[request.id] as matches" class="stack">
+      <div *ngIf="matches.length; else noMatches" class="grid cards">
+        <article class="panel" *ngFor="let property of matches">
+          <div class="eyebrow">{{ property.location.city }}, {{ property.location.area }}</div>
+          <h4>{{ property.title }}</h4>
+          <div class="price">{{ formatCurrency(property.price, property.currency) }}</div>
+          <a [routerLink]="['/properties', property.id]" class="btn-secondary">{{ 'requests.viewProperty' | translate }}</a>
+        </article>
+      </div>
+      <ng-template #noMatches>
+        <div class="empty-state">{{ 'requests.noMatches' | translate }}</div>
+      </ng-template>
+    </div>
+  </article>
+
+  <div *ngIf="!requests.length" class="empty-state">{{ 'requests.emptyState' | translate }}</div>
+</section>

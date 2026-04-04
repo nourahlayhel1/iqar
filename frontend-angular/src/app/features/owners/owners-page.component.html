@@ -1,0 +1,39 @@
+<section class="panel hero">
+  <div class="toolbar">
+    <div>
+      <div class="eyebrow">{{ 'owners.eyebrow' | translate }}</div>
+      <h2>{{ 'owners.title' | translate }}</h2>
+    </div>
+    <a routerLink="/owners/new" class="btn">{{ 'owners.addOwner' | translate }}</a>
+  </div>
+</section>
+
+<section class="panel">
+  <label class="label">{{ 'owners.searchLabel' | translate }}</label>
+  <input [formControl]="form.controls.q" [placeholder]="'owners.searchPlaceholder' | translate" />
+</section>
+
+<section *ngIf="error" class="error-box">{{ error }}</section>
+<section *ngIf="loading" class="panel skeleton-stack">
+  <div class="skeleton skeleton-title"></div>
+  <div class="skeleton skeleton-field" *ngFor="let item of [1, 2, 3, 4, 5]"></div>
+</section>
+
+<section *ngIf="!loading" class="grid cards">
+  <article class="panel owner-card" *ngFor="let owner of owners">
+    <div class="eyebrow">{{ owner.documents.length }} {{ 'owners.docsCount' | translate }}</div>
+    <h3>{{ owner.name }}</h3>
+    <p class="muted">{{ owner.phone }}</p>
+    <div class="stats" *ngIf="owner.altPhone">
+      <span class="pill">{{ owner.altPhone }}</span>
+    </div>
+    <p class="muted">{{ owner.notes || ('customerDetail.noNotes' | translate) }}</p>
+    <div class="toolbar owner-actions">
+      <a [routerLink]="['/owners', owner.id]" class="btn">{{ 'common.view' | translate }}</a>
+      <a [routerLink]="['/owners', owner.id, 'edit']" class="btn-secondary">{{ 'common.edit' | translate }}</a>
+      <button type="button" class="btn-danger" (click)="deleteOwner(owner.id)">{{ 'common.delete' | translate }}</button>
+    </div>
+  </article>
+
+  <div *ngIf="!owners.length" class="empty-state">{{ 'owners.emptyState' | translate }}</div>
+</section>

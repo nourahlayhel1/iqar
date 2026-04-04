@@ -1,0 +1,89 @@
+<section *ngIf="error" class="error-box">{{ error }}</section>
+<ng-container *ngIf="loading">
+  <section class="grid grid-2">
+    <div class="panel skeleton-stack">
+      <div class="skeleton skeleton-box"></div>
+    </div>
+    <div class="panel hero skeleton-stack">
+      <div class="skeleton skeleton-chip"></div>
+      <div class="skeleton skeleton-title"></div>
+      <div class="skeleton skeleton-text short"></div>
+      <div class="skeleton skeleton-text"></div>
+      <div class="skeleton-row">
+        <div class="skeleton skeleton-chip"></div>
+        <div class="skeleton skeleton-chip"></div>
+        <div class="skeleton skeleton-chip"></div>
+      </div>
+    </div>
+  </section>
+  <section class="panel skeleton-stack">
+    <div class="skeleton skeleton-title"></div>
+    <div class="skeleton skeleton-field"></div>
+    <div class="skeleton skeleton-field"></div>
+  </section>
+</ng-container>
+
+<ng-container *ngIf="!loading && property">
+  <section class="grid grid-2">
+    <div class="panel">
+      <div class="image-frame">
+        <img [src]="property.coverImage || property.images[0] || 'https://placehold.co/900x600?text=Property'" [alt]="property.title">
+      </div>
+    </div>
+    <div class="panel hero">
+      <div class="eyebrow">{{ property.location.city }}, {{ property.location.area }}</div>
+      <h2>{{ property.title }}</h2>
+      <div class="price">{{ formatCurrency(property.price, property.currency) }}</div>
+      <p class="muted">{{ property.description }}</p>
+      <div class="stats">
+        <span class="pill">{{ 'propertyPurpose.' + property.purpose | translate }}</span>
+        <span class="pill">{{ 'propertyType.' + property.type | translate }}</span>
+        <span class="pill" *ngIf="property.bedrooms !== undefined">{{ property.bedrooms }} {{ 'units.bedrooms' | translate }}</span>
+        <span class="pill" *ngIf="property.bathrooms !== undefined">{{ property.bathrooms }} {{ 'units.bathrooms' | translate }}</span>
+        <span class="pill" *ngIf="property.areaSqm !== undefined">{{ property.areaSqm }} {{ 'units.sqm' | translate }}</span>
+      </div>
+      <div class="toolbar">
+        <a [routerLink]="['/properties', property.id, 'edit']" class="btn-secondary">{{ 'common.edit' | translate }}</a>
+        <button type="button" class="btn-danger" (click)="deleteProperty()">{{ 'common.delete' | translate }}</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>{{ 'propertyDetail.details' | translate }}</h3>
+    <div class="grid grid-2">
+      <div><span class="label">{{ 'fields.country' | translate }}</span><strong>{{ property.location.country }}</strong></div>
+      <div><span class="label">{{ 'fields.address' | translate }}</span><strong>{{ property.location.address || ('common.na' | translate) }}</strong></div>
+      <div><span class="label">{{ 'fields.source' | translate }}</span><strong>{{ 'propertySource.' + (property.source || 'direct_owner') | translate }}</strong></div>
+      <div><span class="label">{{ 'fields.floor' | translate }}</span><strong>{{ property.floor ?? ('common.na' | translate) }}</strong></div>
+      <div><span class="label">{{ 'fields.parking' | translate }}</span><strong>{{ property.parking ? ('common.yes' | translate) : ('common.no' | translate) }}</strong></div>
+      <div><span class="label">{{ 'fields.furnished' | translate }}</span><strong>{{ property.furnished ? ('common.yes' | translate) : ('common.no' | translate) }}</strong></div>
+      <div>
+        <span class="label">{{ 'fields.ownerName' | translate }}</span>
+        <strong *ngIf="owner; else ownerFallback">
+          <a [routerLink]="['/owners', owner.id]">{{ owner.name }}</a>
+        </strong>
+        <ng-template #ownerFallback>
+          <strong>{{ property.ownerName || ('common.na' | translate) }}</strong>
+        </ng-template>
+      </div>
+      <div><span class="label">{{ 'fields.ownerPhone' | translate }}</span><strong>{{ owner?.phone || property.ownerPhone || ('common.na' | translate) }}</strong></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>Property images</h3>
+    <div class="gallery-grid">
+      <div class="image-frame" *ngFor="let image of property.images">
+        <img [src]="image" [alt]="property.title">
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>{{ 'fields.amenities' | translate }}</h3>
+    <div class="stats">
+      <span class="pill" *ngFor="let amenity of property.amenities">{{ 'amenities.' + amenity | translate }}</span>
+    </div>
+  </section>
+</ng-container>

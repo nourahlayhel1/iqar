@@ -1,0 +1,9 @@
+<svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="220" height="220" rx="28" fill="#F3E7D8"/>
+  <rect x="28" y="28" width="164" height="164" rx="22" stroke="#8C583A" stroke-width="4" stroke-dasharray="10 10"/>
+  <path d="M66 132L110 86L154 132" stroke="#8C583A" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M82 132V104H138V132" stroke="#8C583A" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="110" y="168" text-anchor="middle" fill="#694027" font-family="Arial, sans-serif" font-size="18" font-weight="700">
+    LOGO
+  </text>
+</svg>

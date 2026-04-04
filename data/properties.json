@@ -1,0 +1,214 @@
+[
+  {
+    "id": "0d9812d0-402e-4a2f-91c0-0af4d7e33501",
+    "title": "Modern Apartment in Beirut Central District",
+    "description": "Bright apartment with generator access, balcony, and walkable city location.",
+    "type": "apartment",
+    "purpose": "rent",
+    "price": 1500,
+    "currency": "USD",
+    "source": "direct_owner",
+    "location": {
+      "country": "Lebanon",
+      "city": "Beirut",
+      "area": "Downtown",
+      "address": "BCD, Beirut"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "areaSqm": 125,
+    "floor": 6,
+    "parking": true,
+    "furnished": true,
+    "amenities": [
+      "generator",
+      "elevator",
+      "balcony",
+      "parking",
+      "furnished"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688"
+    ],
+    "ownerId": "a8b1d5ae-6f02-46e7-89df-2fd54132f101",
+    "ownerName": "Nadim Salem",
+    "ownerPhone": "+96170000001",
+    "createdAt": "2026-01-15T09:00:00.000Z",
+    "updatedAt": "2026-02-18T09:00:00.000Z"
+  },
+  {
+    "id": "0d9812d0-402e-4a2f-91c0-0af4d7e33502",
+    "title": "Sea View Villa in Batroun",
+    "description": "Large villa with garden, pool, and panoramic sea view.",
+    "type": "villa",
+    "purpose": "sale",
+    "price": 650000,
+    "currency": "USD",
+    "source": "direct_owner",
+    "location": {
+      "country": "Lebanon",
+      "city": "Batroun",
+      "area": "Selaata",
+      "address": "Coastal Road"
+    },
+    "bedrooms": 5,
+    "bathrooms": 6,
+    "areaSqm": 480,
+    "parking": true,
+    "furnished": false,
+    "amenities": [
+      "sea_view",
+      "garden",
+      "pool",
+      "parking",
+      "security"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750"
+    ],
+    "ownerId": "a8b1d5ae-6f02-46e7-89df-2fd54132f102",
+    "ownerName": "Rana Karam",
+    "ownerPhone": "+96170000002",
+    "createdAt": "2025-12-20T10:30:00.000Z",
+    "updatedAt": "2026-02-08T11:15:00.000Z"
+  },
+  {
+    "id": "0d9812d0-402e-4a2f-91c0-0af4d7e33503",
+    "title": "Retail Shop on Main Street",
+    "description": "Ground floor retail unit in a high foot-traffic commercial strip.",
+    "type": "shop",
+    "purpose": "rent",
+    "price": 2200,
+    "currency": "USD",
+    "source": "direct_owner",
+    "location": {
+      "country": "Lebanon",
+      "city": "Jounieh",
+      "area": "Kaslik"
+    },
+    "bathrooms": 1,
+    "areaSqm": 90,
+    "floor": 0,
+    "parking": false,
+    "furnished": false,
+    "amenities": [
+      "generator",
+      "storage"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1497366754035-f200968a6e72",
+      "/assets/retail-shop-on-main-street/image-82e9a0c6-2a07-4685-b033-61fde211998b.avif"
+    ],
+    "ownerId": "a8b1d5ae-6f02-46e7-89df-2fd54132f103",
+    "ownerName": "Elie Haddad",
+    "ownerPhone": "+96170000003",
+    "createdAt": "2026-02-01T08:15:00.000Z",
+    "updatedAt": "2026-04-04T16:52:07.957Z",
+    "coverImage": "https://images.unsplash.com/photo-1497366754035-f200968a6e72"
+  },
+  {
+    "id": "22c56590-0376-4f67-80fa-c499263a976a",
+    "title": "property 1",
+    "description": "ddd",
+    "type": "apartment",
+    "purpose": "sale",
+    "price": 100000,
+    "currency": "USD",
+    "source": "direct_owner",
+    "location": {
+      "country": "lebanon",
+      "city": "tripoli",
+      "area": "jj",
+      "address": "ddd"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "areaSqm": 120,
+    "floor": 2,
+    "parking": true,
+    "furnished": true,
+    "amenities": [
+      "sea_view",
+      "elevator",
+      "generator"
+    ],
+    "images": [],
+    "ownerId": "a8b1d5ae-6f02-46e7-89df-2fd54132f104",
+    "ownerName": "ss",
+    "ownerPhone": "728392",
+    "createdAt": "2026-03-03T14:38:36.558Z",
+    "updatedAt": "2026-03-03T14:38:36.558Z"
+  },
+  {
+    "id": "102a250b-de01-46cb-9f17-088a4c92fe6b",
+    "title": "apartment dam w farez",
+    "description": "ndnfnf",
+    "type": "apartment",
+    "purpose": "sale",
+    "price": 22000,
+    "currency": "USD",
+    "source": "direct_owner",
+    "location": {
+      "country": "Lebanon",
+      "city": "tripoli",
+      "area": "dam w farez",
+      "address": "ddd"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "areaSqm": 120,
+    "floor": 2,
+    "parking": true,
+    "furnished": true,
+    "amenities": [
+      "elevator",
+      "sea_view",
+      "generator"
+    ],
+    "images": [],
+    "ownerId": "a8b1d5ae-6f02-46e7-89df-2fd54132f105",
+    "ownerName": "ndnd",
+    "ownerPhone": "sss",
+    "createdAt": "2026-03-05T20:52:39.580Z",
+    "updatedAt": "2026-03-05T20:52:39.580Z"
+  },
+  {
+    "id": "d43644e4-a335-42da-9238-712b312c8589",
+    "title": "new property",
+    "description": "aaa",
+    "type": "apartment",
+    "purpose": "sale",
+    "price": 50000,
+    "currency": "USD",
+    "source": "broker",
+    "location": {
+      "country": "lebanon",
+      "city": "tripoli",
+      "area": "a",
+      "address": "a"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "areaSqm": 130,
+    "floor": 2,
+    "parking": false,
+    "furnished": true,
+    "amenities": [
+      "sea_view",
+      "elevator",
+      "generator"
+    ],
+    "coverImage": "/assets/new-property/cover.avif",
+    "images": [
+      "/assets/new-property/photo-1.jpg",
+      "/assets/new-property/photo-2.jpg",
+      "/assets/new-property/cover.avif",
+      "/assets/new-property/photo-3.png"
+    ],
+    "ownerId": "a8b1d5ae-6f02-46e7-89df-2fd54132f101",
+    "ownerName": "Nadim Salem",
+    "ownerPhone": "+96170000001",
+    "createdAt": "2026-04-04T17:00:17.697Z",
+    "updatedAt": "2026-04-04T17:00:17.697Z"
+  }
+]

@@ -1,0 +1,219 @@
+{
+  "shell": {
+    "brandSubtitle": "إدارة العقارات",
+    "properties": "العقارات",
+    "customers": "العملاء",
+    "owners": "المالكون",
+    "requests": "الطلبات"
+  },
+  "common": {
+    "actions": "الإجراءات",
+    "any": "الكل",
+    "clear": "مسح",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "na": "غير متوفر",
+    "no": "لا",
+    "remove": "إزالة",
+    "saveChanges": "حفظ التعديلات",
+    "saving": "جاري الحفظ...",
+    "view": "عرض",
+    "yes": "نعم"
+  },
+  "messages": {
+    "confirmDeleteCustomer": "هل تريد حذف هذا العميل؟ سيتم حذف طلباته أيضاً.",
+    "confirmDeleteOwner": "هل تريد حذف هذا المالك؟",
+    "confirmDeleteProperty": "هل تريد حذف هذا العقار؟",
+    "confirmDeleteRequest": "هل تريد حذف هذا الطلب؟",
+    "deleteFailed": "فشلت عملية الحذف.",
+    "findMatchesFailed": "فشل البحث عن العقارات المطابقة.",
+    "loadCustomerFailed": "فشل تحميل بيانات العميل.",
+    "loadCustomersFailed": "فشل تحميل العملاء.",
+    "loadOwnerFailed": "فشل تحميل بيانات المالك.",
+    "loadOwnersFailed": "فشل تحميل المالكين.",
+    "loadPropertiesFailed": "فشل تحميل العقارات.",
+    "loadPropertyFailed": "فشل تحميل العقار.",
+    "loadRequestFormFailed": "فشل تحميل نموذج الطلب.",
+    "loadRequestsFailed": "فشل تحميل الطلبات.",
+    "loadingCustomer": "جاري تحميل العميل...",
+    "loadingCustomers": "جاري تحميل العملاء...",
+    "loadingProperties": "جاري تحميل العقارات...",
+    "loadingProperty": "جاري تحميل العقار...",
+    "loadingRequests": "جاري تحميل الطلبات...",
+    "saveCustomerFailed": "فشل حفظ العميل.",
+    "saveOwnerFailed": "فشل حفظ المالك.",
+    "savePropertyFailed": "فشل حفظ العقار.",
+    "saveRequestFailed": "فشل حفظ الطلب."
+  },
+  "units": {
+    "bath": "حمام",
+    "bathrooms": "حمامات",
+    "bed": "غرفة",
+    "bedrooms": "غرف نوم",
+    "sqm": "متر مربع"
+  },
+  "sort": {
+    "newest": "الأحدث",
+    "oldest": "الأقدم",
+    "priceAsc": "السعر من الأقل للأعلى",
+    "priceDesc": "السعر من الأعلى للأقل"
+  },
+  "propertyType": {
+    "apartment": "شقة",
+    "land": "أرض",
+    "office": "مكتب",
+    "other": "أخرى",
+    "shop": "محل",
+    "villa": "فيلا"
+  },
+  "propertyPurpose": {
+    "rent": "إيجار",
+    "sale": "بيع"
+  },
+  "propertySource": {
+    "broker": "وسيط",
+    "direct_owner": "مالك مباشر"
+  },
+  "amenities": {
+    "balcony": "شرفة",
+    "elevator": "مصعد",
+    "furnished": "مفروش",
+    "garden": "حديقة",
+    "generator": "مولد",
+    "parking": "موقف سيارات",
+    "pool": "مسبح",
+    "sea_view": "إطلالة بحرية",
+    "security": "حراسة",
+    "storage": "مستودع"
+  },
+  "fields": {
+    "address": "العنوان",
+    "altPhone": "رقم بديل",
+    "amenities": "المزايا",
+    "amenitiesCsv": "المزايا",
+    "amenitiesMatchAll": "المزايا",
+    "area": "المنطقة",
+    "areaSqm": "المساحة بالمتر",
+    "bathrooms": "الحمامات",
+    "bedrooms": "غرف النوم",
+    "city": "المدينة",
+    "country": "البلد",
+    "currency": "العملة",
+    "customer": "العميل",
+    "description": "الوصف",
+    "documentName": "اسم المستند",
+    "documentUrl": "رابط المستند",
+    "floor": "الطابق",
+    "furnished": "مفروش",
+    "globalSearch": "بحث",
+    "imagesText": "الصور",
+    "maxPrice": "أعلى سعر",
+    "minAreaSqm": "أقل مساحة بالمتر",
+    "minBathrooms": "أقل عدد حمامات",
+    "minBedrooms": "أقل عدد غرف نوم",
+    "minPrice": "أقل سعر",
+    "name": "الاسم",
+    "notes": "ملاحظات",
+    "ownerName": "اسم المالك",
+    "ownerPhone": "هاتف المالك",
+    "parking": "موقف سيارات",
+    "phone": "الهاتف",
+    "preferredLocations": "المناطق المفضلة",
+    "price": "السعر",
+    "purpose": "الغرض",
+    "requiredAmenitiesCsv": "المزايا المطلوبة",
+    "sort": "الترتيب",
+    "source": "المصدر",
+    "title": "العنوان",
+    "type": "النوع",
+    "types": "الأنواع"
+  },
+  "properties": {
+    "advancedFilters": "فلاتر متقدمة",
+    "addProperty": "إضافة عقار",
+    "downloadTemplate": "تنزيل قالب Excel",
+    "emptyState": "لا توجد عقارات.",
+    "eyebrow": "العقارات",
+    "filtersSubtitle": "",
+    "filtersTitle": "بحث",
+    "foundSuffix": "عقار",
+    "importedCount": "عدد العقارات المستوردة:",
+    "importExcel": "استيراد Excel",
+    "importingExcel": "جاري الاستيراد...",
+    "subtitle": "",
+    "title": "العقارات"
+  },
+  "propertyDetail": {
+    "details": "التفاصيل"
+  },
+  "propertyForm": {
+    "addTitle": "إضافة عقار",
+    "createButton": "إنشاء عقار",
+    "editTitle": "تعديل عقار",
+    "subtitle": ""
+  },
+  "customers": {
+    "addCustomer": "إضافة عميل",
+    "emptyState": "لا يوجد عملاء.",
+    "eyebrow": "العملاء",
+    "searchLabel": "بحث",
+    "searchPlaceholder": "الاسم أو الهاتف",
+    "subtitle": "",
+    "title": "العملاء"
+  },
+  "owners": {
+    "addOwner": "إضافة مالك",
+    "docsCount": "مستند",
+    "documents": "المستندات",
+    "emptyState": "لا يوجد مالكون.",
+    "eyebrow": "المالكون",
+    "noDocuments": "لا توجد مستندات بعد.",
+    "searchLabel": "بحث",
+    "searchPlaceholder": "الاسم أو الهاتف",
+    "title": "المالكون"
+  },
+  "ownerDetail": {
+    "eyebrow": "ملف المالك"
+  },
+  "ownerForm": {
+    "addDocument": "إضافة مستند",
+    "addTitle": "إضافة مالك",
+    "createButton": "إنشاء مالك",
+    "editTitle": "تعديل مالك"
+  },
+  "customerDetail": {
+    "contactDetails": "بيانات التواصل",
+    "eyebrow": "ملف العميل",
+    "noNotes": "لا توجد ملاحظات.",
+    "noRequests": "لا توجد طلبات بعد.",
+    "requestsSuffix": "طلب",
+    "viewRequestsPage": "عرض الطلبات"
+  },
+  "customerForm": {
+    "addTitle": "إضافة عميل",
+    "createButton": "إنشاء عميل",
+    "editTitle": "تعديل عميل",
+    "subtitle": ""
+  },
+  "requests": {
+    "addRequest": "إضافة طلب",
+    "allCustomers": "كل العملاء",
+    "emptyState": "لا توجد طلبات.",
+    "eyebrow": "الطلبات",
+    "filterCustomer": "العميل",
+    "findMatches": "بحث عن تطابق",
+    "findingMatches": "جاري البحث...",
+    "noMatches": "لا توجد نتائج.",
+    "subtitle": "",
+    "title": "الطلبات",
+    "unknownCustomer": "عميل غير معروف",
+    "viewProperty": "عرض العقار"
+  },
+  "requestForm": {
+    "addLocation": "إضافة منطقة",
+    "addTitle": "إضافة طلب",
+    "createButton": "إنشاء طلب",
+    "editTitle": "تعديل طلب",
+    "subtitle": ""
+  }
+}

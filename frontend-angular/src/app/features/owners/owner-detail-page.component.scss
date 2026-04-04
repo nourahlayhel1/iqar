@@ -1,0 +1,33 @@
+h2,
+h3,
+h4 {
+  margin: 0 0 0.35rem;
+}
+
+.doc-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.doc-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: rgba(0, 178, 255, 0.12);
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.linked-property {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+}

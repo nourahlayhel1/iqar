@@ -1,0 +1,219 @@
+{
+  "shell": {
+    "brandSubtitle": "Real estate management",
+    "properties": "Properties",
+    "customers": "Customers",
+    "owners": "Owners",
+    "requests": "Requests"
+  },
+  "common": {
+    "actions": "Actions",
+    "any": "Any",
+    "clear": "Clear",
+    "delete": "Delete",
+    "edit": "Edit",
+    "na": "N/A",
+    "no": "No",
+    "remove": "Remove",
+    "saveChanges": "Save changes",
+    "saving": "Saving...",
+    "view": "View",
+    "yes": "Yes"
+  },
+  "messages": {
+    "confirmDeleteCustomer": "Delete this customer? This also deletes their requests.",
+    "confirmDeleteOwner": "Delete this owner?",
+    "confirmDeleteProperty": "Delete this property?",
+    "confirmDeleteRequest": "Delete this request?",
+    "deleteFailed": "Delete failed.",
+    "findMatchesFailed": "Failed to find matches.",
+    "loadCustomerFailed": "Failed to load customer.",
+    "loadCustomersFailed": "Failed to load customers.",
+    "loadOwnerFailed": "Failed to load owner.",
+    "loadOwnersFailed": "Failed to load owners.",
+    "loadPropertiesFailed": "Failed to load properties.",
+    "loadPropertyFailed": "Failed to load property.",
+    "loadRequestFormFailed": "Failed to load request form.",
+    "loadRequestsFailed": "Failed to load requests.",
+    "loadingCustomer": "Loading customer...",
+    "loadingCustomers": "Loading customers...",
+    "loadingProperties": "Loading properties...",
+    "loadingProperty": "Loading property...",
+    "loadingRequests": "Loading requests...",
+    "saveCustomerFailed": "Failed to save customer.",
+    "saveOwnerFailed": "Failed to save owner.",
+    "savePropertyFailed": "Failed to save property.",
+    "saveRequestFailed": "Failed to save request."
+  },
+  "units": {
+    "bath": "bath",
+    "bathrooms": "bathrooms",
+    "bed": "bed",
+    "bedrooms": "bedrooms",
+    "sqm": "sqm"
+  },
+  "sort": {
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "priceAsc": "Price Low - High",
+    "priceDesc": "Price High - Low"
+  },
+  "propertyType": {
+    "apartment": "Apartment",
+    "land": "Land",
+    "office": "Office",
+    "other": "Other",
+    "shop": "Shop",
+    "villa": "Villa"
+  },
+  "propertyPurpose": {
+    "rent": "Rent",
+    "sale": "Sale"
+  },
+  "propertySource": {
+    "broker": "Broker",
+    "direct_owner": "Direct owner"
+  },
+  "amenities": {
+    "balcony": "Balcony",
+    "elevator": "Elevator",
+    "furnished": "Furnished",
+    "garden": "Garden",
+    "generator": "Generator",
+    "parking": "Parking",
+    "pool": "Pool",
+    "sea_view": "Sea view",
+    "security": "Security",
+    "storage": "Storage"
+  },
+  "fields": {
+    "address": "Address",
+    "altPhone": "Alternative phone",
+    "amenities": "Amenities",
+    "amenitiesCsv": "Amenities",
+    "amenitiesMatchAll": "Amenities",
+    "area": "Area",
+    "areaSqm": "Area sqm",
+    "bathrooms": "Bathrooms",
+    "bedrooms": "Bedrooms",
+    "city": "City",
+    "country": "Country",
+    "currency": "Currency",
+    "customer": "Customer",
+    "description": "Description",
+    "documentName": "Document name",
+    "documentUrl": "Document URL",
+    "floor": "Floor",
+    "furnished": "Furnished",
+    "globalSearch": "Search",
+    "imagesText": "Images",
+    "maxPrice": "Max price",
+    "minAreaSqm": "Min area sqm",
+    "minBathrooms": "Min bathrooms",
+    "minBedrooms": "Min bedrooms",
+    "minPrice": "Min price",
+    "name": "Name",
+    "notes": "Notes",
+    "ownerName": "Owner name",
+    "ownerPhone": "Owner phone",
+    "parking": "Parking",
+    "phone": "Phone",
+    "preferredLocations": "Preferred locations",
+    "price": "Price",
+    "purpose": "Purpose",
+    "requiredAmenitiesCsv": "Required amenities",
+    "sort": "Sort",
+    "source": "Listed by",
+    "title": "Title",
+    "type": "Type",
+    "types": "Types"
+  },
+  "properties": {
+    "advancedFilters": "Advanced filters",
+    "addProperty": "Add Property",
+    "downloadTemplate": "Download Excel Template",
+    "emptyState": "No properties found.",
+    "eyebrow": "Properties",
+    "filtersSubtitle": "",
+    "filtersTitle": "Search",
+    "foundSuffix": "properties found",
+    "importedCount": "Imported properties:",
+    "importExcel": "Import Excel",
+    "importingExcel": "Importing...",
+    "subtitle": "",
+    "title": "Properties"
+  },
+  "propertyDetail": {
+    "details": "Details"
+  },
+  "propertyForm": {
+    "addTitle": "Add property",
+    "createButton": "Create property",
+    "editTitle": "Edit property",
+    "subtitle": ""
+  },
+  "customers": {
+    "addCustomer": "Add Customer",
+    "emptyState": "No customers found.",
+    "eyebrow": "Customers",
+    "searchLabel": "Search",
+    "searchPlaceholder": "Name or phone",
+    "subtitle": "",
+    "title": "Customers"
+  },
+  "owners": {
+    "addOwner": "Add Owner",
+    "docsCount": "document(s)",
+    "documents": "Documents",
+    "emptyState": "No owners found.",
+    "eyebrow": "Owners",
+    "noDocuments": "No documents yet.",
+    "searchLabel": "Search",
+    "searchPlaceholder": "Name or phone",
+    "title": "Owners"
+  },
+  "ownerDetail": {
+    "eyebrow": "Owner profile"
+  },
+  "ownerForm": {
+    "addDocument": "Add document",
+    "addTitle": "Add owner",
+    "createButton": "Create owner",
+    "editTitle": "Edit owner"
+  },
+  "customerDetail": {
+    "contactDetails": "Contact details",
+    "eyebrow": "Customer profile",
+    "noNotes": "No notes.",
+    "noRequests": "No requests yet.",
+    "requestsSuffix": "request(s)",
+    "viewRequestsPage": "View requests"
+  },
+  "customerForm": {
+    "addTitle": "Add customer",
+    "createButton": "Create customer",
+    "editTitle": "Edit customer",
+    "subtitle": ""
+  },
+  "requests": {
+    "addRequest": "Add Request",
+    "allCustomers": "All customers",
+    "emptyState": "No requests found.",
+    "eyebrow": "Requests",
+    "filterCustomer": "Customer",
+    "findMatches": "Find matches",
+    "findingMatches": "Finding...",
+    "noMatches": "No matches found.",
+    "subtitle": "",
+    "title": "Requests",
+    "unknownCustomer": "Unknown customer",
+    "viewProperty": "View property"
+  },
+  "requestForm": {
+    "addLocation": "Add location",
+    "addTitle": "Add request",
+    "createButton": "Create request",
+    "editTitle": "Edit request",
+    "subtitle": ""
+  }
+}

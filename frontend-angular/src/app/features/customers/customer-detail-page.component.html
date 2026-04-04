@@ -1,0 +1,79 @@
+<section *ngIf="error" class="error-box">{{ error }}</section>
+<ng-container *ngIf="loading">
+  <section class="panel hero skeleton-stack">
+    <div class="skeleton skeleton-chip"></div>
+    <div class="skeleton skeleton-title"></div>
+    <div class="skeleton skeleton-text short"></div>
+  </section>
+  <section class="grid grid-2">
+    <div class="panel skeleton-stack">
+      <div class="skeleton skeleton-title"></div>
+      <div class="skeleton skeleton-field"></div>
+      <div class="skeleton skeleton-field"></div>
+      <div class="skeleton skeleton-field"></div>
+    </div>
+    <div class="panel skeleton-stack">
+      <div class="skeleton skeleton-title"></div>
+      <div class="skeleton skeleton-field"></div>
+      <div class="skeleton skeleton-field"></div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-container *ngIf="!loading && customer">
+  <section class="panel hero">
+    <div class="toolbar">
+      <div>
+        <div class="eyebrow">{{ 'customerDetail.eyebrow' | translate }}</div>
+        <h2>{{ customer.name }}</h2>
+        <p class="muted">{{ customer.phone }}</p>
+      </div>
+      <div class="toolbar">
+        <a [routerLink]="['/customers', customer.id, 'edit']" class="btn-secondary">{{ 'common.edit' | translate }}</a>
+        <button type="button" class="btn-danger" (click)="deleteCustomer()">{{ 'common.delete' | translate }}</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid grid-2">
+    <div class="panel">
+      <h3>{{ 'customerDetail.contactDetails' | translate }}</h3>
+      <div class="stack">
+        <div><span class="label">{{ 'fields.phone' | translate }}</span><strong>{{ customer.phone }}</strong></div>
+        <div><span class="label">{{ 'fields.altPhone' | translate }}</span><strong>{{ customer.altPhone || ('common.na' | translate) }}</strong></div>
+        <div><span class="label">{{ 'fields.notes' | translate }}</span><div>{{ customer.notes || ('customerDetail.noNotes' | translate) }}</div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="toolbar">
+        <div>
+          <h3>{{ 'shell.requests' | translate }}</h3>
+          <p class="muted">{{ requests.length }} {{ 'customerDetail.requestsSuffix' | translate }}</p>
+        </div>
+        <a [routerLink]="['/requests/new']" [queryParams]="{ customerId: customer.id }" class="btn">{{ 'requests.addRequest' | translate }}</a>
+      </div>
+
+      <div *ngIf="requests.length; else noRequests" class="stack">
+        <article class="panel" *ngFor="let request of requests">
+          <div class="eyebrow">{{ 'propertyPurpose.' + request.purpose | translate }} / {{ 'propertyType.' + request.requestType | translate }}</div>
+          <h4>{{ requestCities(request) }}</h4>
+          <p class="muted">{{ request.notes || ('customerDetail.noNotes' | translate) }}</p>
+          <div class="stats">
+            <span class="pill" *ngIf="request.minPrice !== undefined">{{ 'fields.minPrice' | translate }} {{ request.minPrice }}</span>
+            <span class="pill" *ngIf="request.maxPrice !== undefined">{{ 'fields.maxPrice' | translate }} {{ request.maxPrice }}</span>
+            <span class="pill" *ngIf="request.minBedrooms !== undefined">{{ request.minBedrooms }}+ {{ 'units.bedrooms' | translate }}</span>
+          </div>
+          <div class="toolbar">
+            <a [routerLink]="['/requests', request.id, 'edit']" class="btn-secondary">{{ 'common.edit' | translate }}</a>
+            <a routerLink="/requests" [queryParams]="{ customerId: customer.id }" class="btn-ghost">{{ 'customerDetail.viewRequestsPage' | translate }}</a>
+          </div>
+        </article>
+      </div>
+
+      <ng-template #noRequests>
+        <div class="empty-state">{{ 'customerDetail.noRequests' | translate }}</div>
+      </ng-template>
+    </div>
+  </section>
+</ng-container>

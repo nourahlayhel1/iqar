@@ -1,0 +1,61 @@
+[
+  {
+    "id": "a8b1d5ae-6f02-46e7-89df-2fd54132f001",
+    "name": "Ziad Msalem",
+    "phone": "03 280 100",
+    "notes": "Owns land listings in Koura.",
+    "documents": [
+      {
+        "name": "Sale contract",
+        "url": "https://example.com/contracts/ziad-msalem-sale-contract.pdf"
+      }
+    ],
+    "createdAt": "2026-01-12T10:00:00.000Z",
+    "updatedAt": "2026-01-12T10:00:00.000Z"
+  },
+  {
+    "id": "a8b1d5ae-6f02-46e7-89df-2fd54132f101",
+    "name": "Nadim Salem",
+    "phone": "+96170000001",
+    "notes": "Owner of the Beirut Central District apartment.",
+    "documents": [],
+    "createdAt": "2026-01-15T09:00:00.000Z",
+    "updatedAt": "2026-02-18T09:00:00.000Z"
+  },
+  {
+    "id": "a8b1d5ae-6f02-46e7-89df-2fd54132f102",
+    "name": "Rana Karam",
+    "phone": "+96170000002",
+    "notes": "Owner of the Batroun sea view villa.",
+    "documents": [],
+    "createdAt": "2025-12-20T10:30:00.000Z",
+    "updatedAt": "2026-02-08T11:15:00.000Z"
+  },
+  {
+    "id": "a8b1d5ae-6f02-46e7-89df-2fd54132f103",
+    "name": "Elie Haddad",
+    "phone": "+96170000003",
+    "notes": "Owner of the Kaslik retail shop.",
+    "documents": [],
+    "createdAt": "2026-02-01T08:15:00.000Z",
+    "updatedAt": "2026-02-25T13:00:00.000Z"
+  },
+  {
+    "id": "a8b1d5ae-6f02-46e7-89df-2fd54132f104",
+    "name": "ss",
+    "phone": "728392",
+    "notes": "Owner of property 1.",
+    "documents": [],
+    "createdAt": "2026-03-03T14:38:36.558Z",
+    "updatedAt": "2026-03-03T14:38:36.558Z"
+  },
+  {
+    "id": "a8b1d5ae-6f02-46e7-89df-2fd54132f105",
+    "name": "ndnd",
+    "phone": "sss",
+    "notes": "Owner of apartment dam w farez.",
+    "documents": [],
+    "createdAt": "2026-03-05T20:52:39.580Z",
+    "updatedAt": "2026-03-05T20:52:39.580Z"
+  }
+]

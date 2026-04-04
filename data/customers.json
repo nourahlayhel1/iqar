@@ -1,0 +1,26 @@
+[
+  {
+    "id": "f5e1f3cb-6f22-4c58-aa4d-2be1a1bb1001",
+    "name": "Maya Khoury",
+    "phone": "+96171111111",
+    "altPhone": "+96132222222",
+    "notes": "Interested in furnished rentals near Beirut.",
+    "createdAt": "2026-01-10T12:00:00.000Z",
+    "updatedAt": "2026-02-10T12:00:00.000Z"
+  },
+  {
+    "id": "f5e1f3cb-6f22-4c58-aa4d-2be1a1bb1002",
+    "name": "Omar Harb",
+    "phone": "+96173333333",
+    "notes": "Looking for long-term investment opportunities.",
+    "createdAt": "2026-01-20T14:00:00.000Z",
+    "updatedAt": "2026-02-16T10:45:00.000Z"
+  },
+  {
+    "id": "e73eb9d2-d6b4-4855-ac38-93b71072e3ba",
+    "name": "Bilal",
+    "phone": "70237457",
+    "createdAt": "2026-03-05T20:47:41.068Z",
+    "updatedAt": "2026-03-05T20:50:02.865Z"
+  }
+]

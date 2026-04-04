@@ -1,0 +1,68 @@
+<section *ngIf="error" class="error-box">{{ error }}</section>
+
+<ng-container *ngIf="loading">
+  <section class="panel hero skeleton-stack">
+    <div class="skeleton skeleton-chip"></div>
+    <div class="skeleton skeleton-title"></div>
+    <div class="skeleton skeleton-text short"></div>
+  </section>
+</ng-container>
+
+<ng-container *ngIf="!loading && owner">
+  <section class="panel hero">
+    <div class="toolbar">
+      <div>
+        <div class="eyebrow">{{ 'ownerDetail.eyebrow' | translate }}</div>
+        <h2>{{ owner.name }}</h2>
+        <p class="muted">{{ owner.phone }}</p>
+      </div>
+      <div class="toolbar">
+        <a [routerLink]="['/owners', owner.id, 'edit']" class="btn-secondary">{{ 'common.edit' | translate }}</a>
+        <button type="button" class="btn-danger" (click)="deleteOwner()">{{ 'common.delete' | translate }}</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid grid-2">
+    <div class="panel">
+      <h3>{{ 'customerDetail.contactDetails' | translate }}</h3>
+      <div class="stack">
+        <div><span class="label">{{ 'fields.phone' | translate }}</span><strong>{{ owner.phone }}</strong></div>
+        <div><span class="label">{{ 'fields.altPhone' | translate }}</span><strong>{{ owner.altPhone || ('common.na' | translate) }}</strong></div>
+        <div><span class="label">{{ 'fields.notes' | translate }}</span><div>{{ owner.notes || ('customerDetail.noNotes' | translate) }}</div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>{{ 'owners.documents' | translate }}</h3>
+      <div *ngIf="owner.documents.length; else noDocuments" class="stack">
+        <a class="panel doc-link" *ngFor="let document of owner.documents" [href]="document.url" target="_blank" rel="noreferrer">
+          <div class="doc-icon">DOC</div>
+          <div>
+            <h4>{{ document.name }}</h4>
+            <p class="muted">{{ document.url }}</p>
+          </div>
+        </a>
+      </div>
+      <ng-template #noDocuments>
+        <div class="empty-state">{{ 'owners.noDocuments' | translate }}</div>
+      </ng-template>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>{{ 'shell.properties' | translate }}</h3>
+    <div *ngIf="properties.length; else noProperties" class="stack">
+      <a class="panel linked-property" *ngFor="let property of properties" [routerLink]="['/properties', property.id]">
+        <div>
+          <h4>{{ property.title }}</h4>
+          <p class="muted">{{ property.location.city }}, {{ property.location.area }}</p>
+        </div>
+        <strong>{{ formatCurrency(property.price, property.currency) }}</strong>
+      </a>
+    </div>
+    <ng-template #noProperties>
+      <div class="empty-state">{{ 'properties.emptyState' | translate }}</div>
+    </ng-template>
+  </section>
+</ng-container>

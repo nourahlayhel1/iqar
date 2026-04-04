@@ -1,0 +1,54 @@
+<section class="panel hero">
+  <div class="toolbar">
+    <div>
+      <div class="eyebrow">{{ 'customers.eyebrow' | translate }}</div>
+      <h2>{{ 'customers.title' | translate }}</h2>
+      <p class="muted">{{ 'customers.subtitle' | translate }}</p>
+    </div>
+    <a routerLink="/customers/new" class="btn">{{ 'customers.addCustomer' | translate }}</a>
+  </div>
+</section>
+
+<section class="panel">
+  <label class="label">{{ 'customers.searchLabel' | translate }}</label>
+  <input [formControl]="form.controls.q" [placeholder]="'customers.searchPlaceholder' | translate">
+</section>
+
+<section *ngIf="error" class="error-box">{{ error }}</section>
+<section *ngIf="loading" class="panel skeleton-stack">
+  <div class="skeleton skeleton-title"></div>
+  <div class="skeleton skeleton-field" *ngFor="let item of [1, 2, 3, 4, 5]"></div>
+</section>
+
+<section *ngIf="!loading" class="panel">
+  <div *ngIf="customers.length; else emptyState" class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{{ 'fields.name' | translate }}</th>
+          <th>{{ 'fields.phone' | translate }}</th>
+          <th>{{ 'fields.altPhone' | translate }}</th>
+          <th>{{ 'common.actions' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let customer of customers">
+          <td>{{ customer.name }}</td>
+          <td>{{ customer.phone }}</td>
+          <td>{{ customer.altPhone || ('common.na' | translate) }}</td>
+          <td>
+            <div class="toolbar">
+              <a [routerLink]="['/customers', customer.id]" class="btn">{{ 'common.view' | translate }}</a>
+              <a [routerLink]="['/customers', customer.id, 'edit']" class="btn-secondary">{{ 'common.edit' | translate }}</a>
+              <button type="button" class="btn-danger" (click)="deleteCustomer(customer.id)">{{ 'common.delete' | translate }}</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty-state">{{ 'customers.emptyState' | translate }}</div>
+  </ng-template>
+</section>
