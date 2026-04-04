@@ -11,9 +11,9 @@ export default async function HomePage() {
       <section className="hero">
         <div className="panel alt">
           <p className="eyebrow">Office overview</p>
-          <h1 className="section-title">Run daily brokerage work without a database.</h1>
+          <h1 className="section-title">Run daily brokerage work on Supabase Postgres.</h1>
           <p className="section-subtitle">
-            This MVP keeps listings, customers, and request matching in JSON files through Next.js route handlers.
+            This MVP now stores listings, customers, owners, and requests in Supabase while keeping the same Next.js APIs.
           </p>
           <div className="actions">
             <Link href="/properties" className="btn">Browse Properties</Link>
