@@ -1,19 +1,25 @@
 import { NextResponse } from "next/server";
 
-const DEV_ORIGIN = "http://localhost:4200";
+const ALLOWED_ORIGINS = new Set([
+  "http://localhost:4200",
+  "http://localhost:3000",
+  "https://iqar-swxy.vercel.app"
+]);
 
-function shouldApplyCors(request: Request): boolean {
-  return process.env.NODE_ENV !== "production" && request.headers.get("origin") === DEV_ORIGIN;
+function getAllowedOrigin(request: Request): string | null {
+  const origin = request.headers.get("origin");
+  return origin && ALLOWED_ORIGINS.has(origin) ? origin : null;
 }
 
 export function withCors(response: NextResponse, request: Request): NextResponse {
-  if (!shouldApplyCors(request)) {
+  const allowedOrigin = getAllowedOrigin(request);
+  if (!allowedOrigin) {
     return response;
   }
 
-  response.headers.set("Access-Control-Allow-Origin", DEV_ORIGIN);
+  response.headers.set("Access-Control-Allow-Origin", allowedOrigin);
   response.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
   response.headers.set("Access-Control-Allow-Credentials", "true");
   response.headers.set("Vary", "Origin");
 

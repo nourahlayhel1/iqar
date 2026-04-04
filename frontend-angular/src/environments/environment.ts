@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBaseUrl: "https://iqar-swxy.vercel.app/",
+  apiBaseUrl: "http://localhost:3000",
 };
