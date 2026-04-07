@@ -1,27 +1,20 @@
 import type { Metadata } from "next";
-import { Playfair_Display } from "next/font/google";
+import { Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { MainNav } from "@/components/main-nav";
 
-const displayFont = Playfair_Display({ subsets: ["latin"], weight: ["600", "700"] });
+const bodyFont = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-body" });
+const displayFont = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" });
 
 export const metadata: Metadata = {
-  title: "Atlas Estate Office",
-  description: "Real estate office MVP built with Next.js and JSON file persistence."
+  title: "IQAR Signature Properties",
+  description: "Single-page luxury property discovery experience built on the existing Next.js data layer."
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={displayFont.className}>
+    <html lang="en" data-theme="dark">
+      <body className={`${bodyFont.variable} ${displayFont.variable}`}>
         <div className="page-shell">
-          <header className="topbar">
-            <div className="brand">
-              <span className="brand-title">Atlas Estate Office</span>
-              <span className="brand-subtitle">Properties, clients, and matching requests in one workflow.</span>
-            </div>
-            <MainNav />
-          </header>
           {children}
         </div>
       </body>

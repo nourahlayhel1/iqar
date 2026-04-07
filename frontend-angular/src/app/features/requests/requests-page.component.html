@@ -49,13 +49,13 @@
       <span class="pill" *ngFor="let amenity of request.mustHaveAmenities || []">{{ 'amenities.' + amenity | translate }}</span>
     </div>
 
-    <div class="toolbar">
+    <div class="toolbar request-cta">
       <button type="button" class="btn" (click)="findMatches(request.id)" [disabled]="matchingRequestId === request.id">
         {{ (matchingRequestId === request.id ? 'requests.findingMatches' : 'requests.findMatches') | translate }}
       </button>
     </div>
 
-    <div *ngIf="matchesByRequestId[request.id] as matches" class="stack">
+    <div *ngIf="matchesByRequestId[request.id] as matches" class="stack matches-section">
       <div *ngIf="matches.length; else noMatches" class="grid cards">
         <article class="panel" *ngFor="let property of matches">
           <div class="eyebrow">{{ property.location.city }}, {{ property.location.area }}</div>

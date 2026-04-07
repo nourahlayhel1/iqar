@@ -1,35 +1,13 @@
-import Link from "next/link";
-import { readCustomers, readProperties, readRequests } from "@/lib/data";
+import { PropertyCatalog } from "@/components/property-catalog";
+import { readProperties } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [properties, customers, requests] = await Promise.all([readProperties(), readCustomers(), readRequests()]);
+  const properties = await readProperties();
+  const countries = [...new Set(properties.map((property) => property.location.country).filter(Boolean))].sort();
+  const cities = [...new Set(properties.map((property) => property.location.city).filter(Boolean))].sort();
+  const areas = [...new Set(properties.map((property) => property.location.area).filter(Boolean))].sort();
 
-  return (
-    <main className="grid" style={{ gap: "1.25rem" }}>
-      <section className="hero">
-        <div className="panel alt">
-          <p className="eyebrow">Office overview</p>
-          <h1 className="section-title">Run daily brokerage work on Supabase Postgres.</h1>
-          <p className="section-subtitle">
-            This MVP now stores listings, customers, owners, and requests in Supabase while keeping the same Next.js APIs.
-          </p>
-          <div className="actions">
-            <Link href="/properties" className="btn">Browse Properties</Link>
-            <Link href="/customers" className="btn-secondary">Manage Customers</Link>
-            <Link href="/requests" className="btn-ghost">Review Requests</Link>
-          </div>
-        </div>
-        <div className="panel">
-          <p className="eyebrow">Snapshot</p>
-          <div className="detail-list">
-            <div className="detail-item"><span className="label">Properties</span><strong>{properties.length}</strong></div>
-            <div className="detail-item"><span className="label">Customers</span><strong>{customers.length}</strong></div>
-            <div className="detail-item"><span className="label">Active requests</span><strong>{requests.length}</strong></div>
-          </div>
-        </div>
-      </section>
-    </main>
-  );
+  return <PropertyCatalog properties={properties} countries={countries} cities={cities} areas={areas} />;
 }
