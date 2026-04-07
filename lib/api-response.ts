@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 const ALLOWED_ORIGINS = new Set([
   "http://localhost:4200",
   "http://localhost:3000",
-  "https://iqar-swxy.vercel.app"
+  "https://iqar-swxy.vercel.app",
+  "https://iqar-rzxq.vercel.app"
 ]);
 
 function getAllowedOrigin(request: Request): string | null {

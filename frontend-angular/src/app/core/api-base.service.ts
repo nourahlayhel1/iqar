@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ApiBaseService {
-  protected readonly baseUrl = environment.apiBaseUrl;
+  protected readonly baseUrl = environment.apiBaseUrl.replace(/\/+$/, '');
 
   protected buildParams(
     values: Record<string, string | number | string[] | undefined | null> | object
