@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { CustomSelect } from "@/components/custom-select";
 import { COMMON_AMENITIES, PROPERTY_PURPOSES, PROPERTY_TYPES } from "@/lib/constants";
 import { formatCurrency } from "@/lib/format";
 import { filterAndSortProperties } from "@/lib/property-query";
@@ -18,22 +19,22 @@ interface PropertyCatalogProps {
 
 const copy = {
   en: {
-    brandKicker: "IQAR Collection",
-    brandTitle: "Signature Properties",
-    brandSubtitle: "A curated one-page market view for premium listings, fast filtering, and sharper search.",
+    brandKicker: "IQAR Estates",
+    brandTitle: "IQAR Property Collection",
+    brandSubtitle: "A refined real estate experience for premium listings, discreet client briefs, and faster brokerage work.",
     filtersNav: "Filters",
     listingsNav: "Listings",
-    heroEyebrow: "Curated property board",
-    heroTitle: "Find the right property through one refined search surface.",
+    heroEyebrow: "Exclusive real estate portfolio",
+    heroTitle: "Exceptional Properties.",
     heroText:
-      "Search by location, narrow by price and type, and scan rich listing cards without leaving the page. The entire catalog is tuned for fast daily brokerage work with a more polished presentation layer.",
+      "Discover a curated portfolio of residences and investment properties, presented with the polish clients expect and the controls brokers need every day.",
     refineSearch: "Refine Search",
     exploreListings: "Explore Listings",
     liveInventory: "Live inventory",
     averageTicket: "Average ticket",
     searchSpread: "Search spread",
     flexible: "Flexible",
-    featuredSelection: "Featured selection",
+    featuredSelection: "Featured residence",
     insightCoverage: "Coverage",
     insightDefaults: "Search defaults",
     insightSort: "Sort order",
@@ -63,8 +64,8 @@ const copy = {
     amenities: "Amenities",
     applyFilters: "Apply filters",
     reset: "Reset",
-    listingBoard: "Listing board",
-    matchingBrief: "Properties that match the current brief",
+    listingBoard: "Available properties",
+    matchingBrief: "Premium listings ready to present",
     listingSubtitle: "A cleaner scan of the live portfolio with room summaries, pricing, and amenity highlights.",
     results: "results",
     noResults:
@@ -216,7 +217,7 @@ function defaultFilters(): PropertyFilters {
 }
 
 export function PropertyCatalog({ properties, countries, cities, areas }: PropertyCatalogProps) {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>("light");
   const [language, setLanguage] = useState<Language>("en");
   const [filters, setFilters] = useState<PropertyFilters>(defaultFilters());
 
@@ -240,14 +241,7 @@ export function PropertyCatalog({ properties, countries, cities, areas }: Proper
 
   const t = copy[language];
   const filteredProperties = filterAndSortProperties(properties, filters);
-  const featuredProperty = filteredProperties[0] ?? properties[0];
-  const featuredImage = featuredProperty?.coverImage ?? featuredProperty?.images[0];
-  const minPrice = filteredProperties.length ? Math.min(...filteredProperties.map((property) => property.price)) : 0;
-  const maxPrice = filteredProperties.length ? Math.max(...filteredProperties.map((property) => property.price)) : 0;
-  const averagePrice = filteredProperties.length
-    ? Math.round(filteredProperties.reduce((total, property) => total + property.price, 0) / filteredProperties.length)
-    : 0;
-
+  const visibleProperties = filteredProperties.slice(0, 6);
   function updateFilter<K extends keyof PropertyFilters>(key: K, value: PropertyFilters[K]) {
     setFilters((current) => ({ ...current, [key]: value }));
   }
@@ -294,67 +288,44 @@ export function PropertyCatalog({ properties, countries, cities, areas }: Proper
       <main className="home-flow">
         <section className="hero-grid">
           <div className="hero-copy panel glass-panel">
-            <p className="eyebrow">{t.heroEyebrow}</p>
-            <h1 className="hero-title">{t.heroTitle}</h1>
+            <h1 className="hero-title">
+              <span>{t.heroTitle}</span>
+              <em>Extraordinary Living.</em>
+            </h1>
             <p className="hero-text">{t.heroText}</p>
-            <div className="hero-actions">
-              <a href="#filters" className="btn">{t.refineSearch}</a>
-              <a href="#listings" className="btn-secondary">{t.exploreListings}</a>
-            </div>
-            <div className="hero-metrics">
-              <div className="metric-card">
-                <span className="metric-label">{t.liveInventory}</span>
-                <strong>{filteredProperties.length}</strong>
+
+            <div className="hero-search-card">
+              <div className="hero-tabs" role="tablist" aria-label="Property purpose">
+                <button type="button" className={filters.purpose === "rent" ? "" : "active"} onClick={() => updateFilter("purpose", "sale")}>Buy</button>
+                <button type="button" className={filters.purpose === "rent" ? "active" : ""} onClick={() => updateFilter("purpose", "rent")}>Rent</button>
               </div>
-              <div className="metric-card">
-                <span className="metric-label">{t.averageTicket}</span>
-                <strong>{averagePrice ? formatCurrency(averagePrice, featuredProperty?.currency ?? "USD") : "N/A"}</strong>
-              </div>
-              <div className="metric-card">
-                <span className="metric-label">{t.searchSpread}</span>
-                <strong>
-                  {minPrice && maxPrice
-                    ? `${formatCurrency(minPrice, featuredProperty?.currency ?? "USD")} - ${formatCurrency(maxPrice, featuredProperty?.currency ?? "USD")}`
-                    : t.flexible}
-                </strong>
+              <div className="hero-search-row">
+                <label>
+                  <span aria-hidden="true">+</span>
+                  <input value={filters.q ?? ""} onChange={(event) => updateFilter("q", event.target.value)} placeholder="City, Neighborhood, or Address" />
+                </label>
+                <label>
+                  <span aria-hidden="true">+</span>
+                  <CustomSelect
+                    value={filters.types?.[0] ?? ""}
+                    placeholder="Property Type"
+                    ariaLabel="Property Type"
+                    options={PROPERTY_TYPES.map((type) => ({ value: type, label: labelForValue(language, type) }))}
+                    onChange={(value) => updateFilter("types", value ? [value] : [])}
+                  />
+                </label>
+                <a href="#listings" className="hero-search-button">Search</a>
               </div>
             </div>
           </div>
 
-          <div className="hero-spotlight panel">
-            <div className="spotlight-media">
-              {featuredImage ? <img src={featuredImage} alt={featuredProperty?.title ?? t.signatureListing} /> : <div className="image-fallback">{t.signatureListing}</div>}
-            </div>
-            {featuredProperty ? (
-              <div className="spotlight-copy">
-                <p className="eyebrow">{t.featuredSelection}</p>
-                <h2>{featuredProperty.title}</h2>
-                <p className="muted">{featuredProperty.location.city}, {featuredProperty.location.area}</p>
-                <div className="price">{formatCurrency(featuredProperty.price, featuredProperty.currency)}</div>
-                <div className="stats">
-                  <span className="stat-pill">{labelForValue(language, featuredProperty.type)}</span>
-                  <span className="stat-pill">{labelForValue(language, featuredProperty.purpose)}</span>
-                  {featuredProperty.bedrooms ? <span className="stat-pill">{featuredProperty.bedrooms} {t.beds}</span> : null}
-                  {featuredProperty.areaSqm ? <span className="stat-pill">{featuredProperty.areaSqm} {t.sqm}</span> : null}
-                </div>
-              </div>
-            ) : null}
-          </div>
         </section>
 
-        <section className="insight-ribbon panel">
-          <div>
-            <span className="label">{t.insightCoverage}</span>
-            <strong>{countries.length} {t.countries} / {cities.length} {t.cities} / {areas.length} {t.areas}</strong>
-          </div>
-          <div>
-            <span className="label">{t.insightDefaults}</span>
-            <strong>{filters.q || filters.city || filters.area ? t.customQuery : t.fullPortfolio}</strong>
-          </div>
-          <div>
-            <span className="label">{t.insightSort}</span>
-            <strong>{labelForValue(language, filters.sort ?? "newest")}</strong>
-          </div>
+        <section className="insight-ribbon hero-stat-band">
+          <div><strong>$4.2B+</strong><span>Portfolio Value</span></div>
+          <div><strong>1,200+</strong><span>Properties Sold</span></div>
+          <div><strong>40+</strong><span>Countries Served</span></div>
+          <div><strong>98%</strong><span>Client Satisfaction</span></div>
         </section>
 
         <section className="catalog-layout">
@@ -463,23 +434,19 @@ export function PropertyCatalog({ properties, countries, cities, areas }: Proper
           </aside>
 
           <section id="listings" className="listing-column">
-            <div className="listing-intro panel">
+            <div className="listing-intro">
               <div className="toolbar">
                 <div>
-                  <p className="eyebrow">{t.listingBoard}</p>
-                  <h2>{t.matchingBrief}</h2>
-                  <p className="muted">{t.listingSubtitle}</p>
+                  <h2>Featured Residences</h2>
+                  <p className="muted">Explore our handpicked selection of premium properties available for acquisition.</p>
                 </div>
-                <div className="results-badge">
-                  <span>{filteredProperties.length}</span>
-                  <small>{t.results}</small>
-                </div>
+                <a href="/properties" className="view-all-link">View All Properties</a>
               </div>
             </div>
 
-            {filteredProperties.length ? (
+            {visibleProperties.length ? (
               <div className="property-grid">
-                {filteredProperties.map((property) => {
+                {visibleProperties.map((property) => {
                   const image = property.coverImage ?? property.images[0];
 
                   return (
@@ -487,32 +454,22 @@ export function PropertyCatalog({ properties, countries, cities, areas }: Proper
                       <div className="listing-media">
                         {image ? <img src={image} alt={property.title} /> : <div className="image-fallback">{t.propertyPreview}</div>}
                         <div className="media-badges">
-                          <span className="badge">{labelForValue(language, property.purpose)}</span>
-                          <span className="badge muted-badge">{labelForValue(language, property.type)}</span>
+                          <span className="badge">For {labelForValue(language, property.purpose)}</span>
+                          <span className="badge muted-badge">Featured</span>
+                          <span className="favorite-badge">♡</span>
                         </div>
                       </div>
                       <div className="listing-body">
-                        <div className="card-head">
-                          <div>
-                            <p className="eyebrow">{property.location.city}, {property.location.area}</p>
-                            <h3>{property.title}</h3>
-                          </div>
-                          <div className="price">{formatCurrency(property.price, property.currency)}</div>
-                        </div>
+                        <div className="price">{formatCurrency(property.price, property.currency)}</div>
+                        <h3>{property.title}</h3>
+                        <p className="listing-location">{property.location.area}, {property.location.city}</p>
                         <p className="listing-description">
                           {property.description || "Well-positioned listing with strong visibility and a clean, broker-friendly summary."}
                         </p>
                         <div className="stats">
-                          {property.bedrooms ? <span className="stat-pill">{property.bedrooms} {t.bedrooms}</span> : null}
-                          {property.bathrooms ? <span className="stat-pill">{property.bathrooms} {t.bathrooms}</span> : null}
-                          {property.areaSqm ? <span className="stat-pill">{property.areaSqm} {t.sqm}</span> : null}
-                          {property.parking ? <span className="stat-pill">{t.parking}</span> : null}
-                          {property.furnished ? <span className="stat-pill">{t.furnished}</span> : null}
-                        </div>
-                        <div className="amenity-row">
-                          {property.amenities.slice(0, 4).map((amenity) => (
-                            <span key={amenity} className="amenity-pill">{labelForValue(language, amenity)}</span>
-                          ))}
+                          {property.bedrooms ? <span className="stat-pill stat-bed">{property.bedrooms}</span> : null}
+                          {property.bathrooms ? <span className="stat-pill stat-bath">{property.bathrooms}</span> : null}
+                          {property.areaSqm ? <span className="stat-pill stat-area">{property.areaSqm} sqm</span> : null}
                         </div>
                       </div>
                     </article>
@@ -523,6 +480,55 @@ export function PropertyCatalog({ properties, countries, cities, areas }: Proper
               <div className="empty-state panel">{t.noResults}</div>
             )}
           </section>
+        </section>
+
+        <section className="luxury-split">
+          <div className="luxury-copy">
+            <h2>Luxury Real Estate</h2>
+            <p>
+              IQAR Estates represents the pinnacle of premium real estate. We provide a refined level of service,
+              discretion, and market expertise to our clientele.
+            </p>
+            <ul>
+              <li>Exclusive off-market opportunities</li>
+              <li>Bespoke property marketing</li>
+              <li>Global network of high-net-worth individuals</li>
+              <li>Discreet and secure transactions</li>
+            </ul>
+            <a href="/requests/new" className="btn">Speak with an Advisor</a>
+          </div>
+          <div className="luxury-media">
+            <img src="/assets/brand/LuxuryRealEstateBranding.webp" alt="Luxury real estate villa" />
+          </div>
+        </section>
+
+        <section className="advantage-section">
+          <div className="advantage-heading">
+            <h2>The IQAR Advantage</h2>
+            <p>Why discerning buyers and sellers choose to partner with us.</p>
+          </div>
+          <div className="advantage-grid">
+            <article>
+              <span>◎</span>
+              <h3>Global Network</h3>
+              <p>Access to regional and international markets with trusted buyer relationships.</p>
+            </article>
+            <article>
+              <span>▣</span>
+              <h3>Verified Listings</h3>
+              <p>Every property is reviewed before joining our curated portfolio.</p>
+            </article>
+            <article>
+              <span>☆</span>
+              <h3>Premium Service</h3>
+              <p>White-glove advisory tailored to each client and property brief.</p>
+            </article>
+            <article>
+              <span>□</span>
+              <h3>Total Discretion</h3>
+              <p>Privacy and security throughout the full real estate journey.</p>
+            </article>
+          </div>
         </section>
       </main>
     </>

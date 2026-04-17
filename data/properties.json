@@ -28,13 +28,14 @@
       "furnished"
     ],
     "images": [
-      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688"
+      "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/modern-apartment-in-beirut-central-district/cover.jpg"
     ],
     "ownerId": "a8b1d5ae-6f02-46e7-89df-2fd54132f101",
     "ownerName": "Nadim Salem",
     "ownerPhone": "+96170000001",
     "createdAt": "2026-01-15T09:00:00.000Z",
-    "updatedAt": "2026-02-18T09:00:00.000Z"
+    "updatedAt": "2026-04-17T11:57:59.413Z",
+    "coverImage": "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/modern-apartment-in-beirut-central-district/cover.jpg"
   },
   {
     "id": "0d9812d0-402e-4a2f-91c0-0af4d7e33502",
@@ -64,13 +65,14 @@
       "security"
     ],
     "images": [
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750"
+      "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/sea-view-villa-in-batroun/cover.jpg"
     ],
     "ownerId": "a8b1d5ae-6f02-46e7-89df-2fd54132f102",
     "ownerName": "Rana Karam",
     "ownerPhone": "+96170000002",
     "createdAt": "2025-12-20T10:30:00.000Z",
-    "updatedAt": "2026-02-08T11:15:00.000Z"
+    "updatedAt": "2026-04-17T11:58:35.033Z",
+    "coverImage": "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/sea-view-villa-in-batroun/cover.jpg"
   },
   {
     "id": "0d9812d0-402e-4a2f-91c0-0af4d7e33503",
@@ -96,15 +98,15 @@
       "storage"
     ],
     "images": [
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72",
-      "/assets/retail-shop-on-main-street/image-82e9a0c6-2a07-4685-b033-61fde211998b.avif"
+      "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/retail-shop-on-main-street/cover.jpg",
+      "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/retail-shop-on-main-street/photo-2.avif"
     ],
     "ownerId": "a8b1d5ae-6f02-46e7-89df-2fd54132f103",
     "ownerName": "Elie Haddad",
     "ownerPhone": "+96170000003",
     "createdAt": "2026-02-01T08:15:00.000Z",
-    "updatedAt": "2026-04-04T16:52:07.957Z",
-    "coverImage": "https://images.unsplash.com/photo-1497366754035-f200968a6e72"
+    "updatedAt": "2026-04-17T11:58:43.456Z",
+    "coverImage": "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/retail-shop-on-main-street/cover.jpg"
   },
   {
     "id": "22c56590-0376-4f67-80fa-c499263a976a",
@@ -198,17 +200,17 @@
       "elevator",
       "generator"
     ],
-    "coverImage": "/assets/new-property/cover.avif",
+    "coverImage": "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/new-property/cover.avif",
     "images": [
-      "/assets/new-property/photo-1.jpg",
-      "/assets/new-property/photo-2.jpg",
-      "/assets/new-property/cover.avif",
-      "/assets/new-property/photo-3.png"
+      "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/new-property/photo-1.jpg",
+      "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/new-property/photo-2.jpg",
+      "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/new-property/cover.avif",
+      "https://afnrzuprdzjctmznyirc.supabase.co/storage/v1/object/public/property-images/new-property/photo-4.png"
     ],
     "ownerId": "a8b1d5ae-6f02-46e7-89df-2fd54132f101",
     "ownerName": "Nadim Salem",
     "ownerPhone": "+96170000001",
     "createdAt": "2026-04-04T17:00:17.697Z",
-    "updatedAt": "2026-04-04T17:00:17.697Z"
+    "updatedAt": "2026-04-17T11:58:47.513Z"
   }
 ]

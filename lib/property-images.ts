@@ -1,6 +1,7 @@
-import { mkdir, writeFile } from "fs/promises";
 import path from "path";
+import { getSupabaseStorageClient } from "@/utils/supabase/storage";
 
+const propertyImagesBucket = "property-images";
 const allowedImageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"]);
 const extensionByMimeType: Record<string, string> = {
   "image/jpeg": ".jpg",
@@ -61,9 +62,8 @@ export async function savePropertyImages(
 ): Promise<Array<{ originalName: string; imagePath: string }>> {
   if (!imageFiles.length) return [];
 
+  const supabase = getSupabaseStorageClient();
   const folderName = slugifyFolderName(propertyTitle);
-  const targetDir = path.join(process.cwd(), "public", "assets", folderName);
-  await mkdir(targetDir, { recursive: true });
 
   let nextPhotoNumber = startingPhotoNumber;
 
@@ -78,13 +78,22 @@ export async function savePropertyImages(
         index === coverImageUploadIndex || (coverImageUploadIndex === undefined && index === 0 && startingPhotoNumber === 1)
           ? `cover${extension}`
           : `photo-${nextPhotoNumber++}${extension}`;
-      const filePath = path.join(targetDir, fileName);
+      const storagePath = `${folderName}/${fileName}`;
       const bytes = Buffer.from(await file.arrayBuffer());
-      await writeFile(filePath, bytes);
+      const { error } = await supabase.storage.from(propertyImagesBucket).upload(storagePath, bytes, {
+        contentType: file.type || "application/octet-stream",
+        upsert: true
+      });
+
+      if (error) {
+        throw new Error(`Failed to upload ${file.name}: ${error.message}`);
+      }
+
+      const { data } = supabase.storage.from(propertyImagesBucket).getPublicUrl(storagePath);
 
       return {
         originalName: file.name,
-        imagePath: `/assets/${folderName}/${fileName}`
+        imagePath: data.publicUrl
       };
     })
   );

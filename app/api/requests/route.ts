@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
 import { corsOptions, jsonResponse } from "@/lib/api-response";
 import { getDataFilePath, readCustomers, readRequests, updateCollection } from "@/lib/data";
-import { validateRequestInput } from "@/lib/validation";
-import type { CustomerRequest } from "@/lib/types";
+import { validateCustomerInput, validateRequestInput } from "@/lib/validation";
+import type { Customer, CustomerRequest } from "@/lib/types";
 
 export const runtime = "nodejs";
 
@@ -22,7 +22,25 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const validation = validateRequestInput(await request.json());
+    const payload = await request.json();
+    const value = typeof payload === "object" && payload !== null ? (payload as Record<string, unknown>) : {};
+    let customerId = typeof value.customerId === "string" ? value.customerId : "";
+
+    if (!customerId && (typeof value.customerName === "string" || typeof value.customerPhone === "string")) {
+      const customerValidation = validateCustomerInput({
+        name: value.customerName,
+        phone: value.customerPhone,
+        notes: typeof value.notes === "string" ? value.notes : undefined
+      });
+      if (!customerValidation.success) return jsonResponse(request, { error: customerValidation.message }, { status: 400 });
+
+      const now = new Date().toISOString();
+      const customer: Customer = { id: uuidv4(), ...customerValidation.data, createdAt: now, updatedAt: now };
+      await updateCollection<Customer>(getDataFilePath("customers.json"), (current) => [...current, customer]);
+      customerId = customer.id;
+    }
+
+    const validation = validateRequestInput({ ...value, customerId });
     if (!validation.success) return jsonResponse(request, { error: validation.message }, { status: 400 });
 
     const customerExists = (await readCustomers()).some((customer) => customer.id === validation.data.customerId);

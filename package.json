@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate:property-images": "node scripts/migrate-property-images-to-storage.mjs --include-remote",
+    "migrate:property-images:dry-run": "node scripts/migrate-property-images-to-storage.mjs --dry-run --include-remote"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.0",

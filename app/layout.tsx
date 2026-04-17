@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
+import { MainNav } from "@/components/main-nav";
+import { SiteFooter } from "@/components/site-footer";
 import "./globals.css";
 
-const bodyFont = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-body" });
-const displayFont = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" });
+const bodyFont = Inter({ subsets: ["latin"], variable: "--font-body" });
+const displayFont = Playfair_Display({ subsets: ["latin"], variable: "--font-display" });
 
 export const metadata: Metadata = {
   title: "IQAR Signature Properties",
@@ -12,11 +14,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="dark">
+    <html lang="en" data-theme="light">
       <body className={`${bodyFont.variable} ${displayFont.variable}`}>
+        <MainNav />
         <div className="page-shell">
           {children}
         </div>
+        <SiteFooter />
       </body>
     </html>
   );
