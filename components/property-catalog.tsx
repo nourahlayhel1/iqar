@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { CustomSelect } from "@/components/custom-select";
 import { COMMON_AMENITIES, PROPERTY_PURPOSES, PROPERTY_TYPES } from "@/lib/constants";
 import { formatCurrency } from "@/lib/format";
@@ -450,7 +451,7 @@ export function PropertyCatalog({ properties, countries, cities, areas }: Proper
                   const image = property.coverImage ?? property.images[0];
 
                   return (
-                    <article key={property.id} className="listing-card panel">
+                    <Link key={property.id} href={`/properties/${property.id}`} className="listing-card panel">
                       <div className="listing-media">
                         {image ? <img src={image} alt={property.title} /> : <div className="image-fallback">{t.propertyPreview}</div>}
                         <div className="media-badges">
@@ -472,7 +473,7 @@ export function PropertyCatalog({ properties, countries, cities, areas }: Proper
                           {property.areaSqm ? <span className="stat-pill stat-area">{property.areaSqm} sqm</span> : null}
                         </div>
                       </div>
-                    </article>
+                    </Link>
                   );
                 })}
               </div>

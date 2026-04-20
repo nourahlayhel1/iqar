@@ -1556,6 +1556,10 @@ textarea:focus {
   margin-top: 1rem;
 }
 
+.property-detail-page {
+  padding-top: clamp(1.5rem, 4vw, 3.5rem);
+}
+
 .grid.two {
   grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
   align-items: stretch;

@@ -9,12 +9,11 @@ export default async function PropertyDetailsPage({ params }: { params: { id: st
   const properties = await readProperties();
   const property = properties.find((entry) => entry.id === params.id);
   if (!property) notFound();
-  const contactLabel = property.source === "broker" ? "Broker" : "Owner";
   const heroImage = property.coverImage || property.images[0] || "https://placehold.co/900x600?text=Property";
   const galleryImages = property.images.length ? property.images : ["https://placehold.co/900x600?text=Property"];
 
   return (
-    <main className="grid">
+    <main className="grid property-detail-page">
       <section className="grid two">
         <div className="panel"><div className="image-frame"><img src={heroImage} alt={property.title} /></div></div>
         <div className="panel alt">
@@ -50,8 +49,6 @@ export default async function PropertyDetailsPage({ params }: { params: { id: st
           <div className="detail-item"><span className="label">Floor</span><strong>{property.floor ?? "N/A"}</strong></div>
           <div className="detail-item"><span className="label">Parking</span><strong>{property.parking ? "Yes" : "No"}</strong></div>
           <div className="detail-item"><span className="label">Furnished</span><strong>{property.furnished ? "Yes" : "No"}</strong></div>
-          <div className="detail-item"><span className="label">{contactLabel}</span><strong>{property.ownerName || "N/A"}</strong></div>
-          <div className="detail-item"><span className="label">{contactLabel} phone</span><strong>{property.ownerPhone || "N/A"}</strong></div>
           <div className="detail-item"><span className="label">Created</span><strong>{formatDate(property.createdAt)}</strong></div>
         </div>
       </section>
