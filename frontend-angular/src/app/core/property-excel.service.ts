@@ -3,10 +3,13 @@ import { firstValueFrom } from 'rxjs';
 import {
   COMMON_AMENITIES,
   CURRENCIES,
+  PROPERTY_AMENITIES_BY_TYPE,
   PROPERTY_CONDITIONS,
   PROPERTY_SOURCES,
   PROPERTY_STATUSES,
-  PROPERTY_TYPES
+  PROPERTY_TYPES,
+  PROPERTY_TYPES_WITH_BATHROOMS,
+  PROPERTY_TYPES_WITH_BEDROOMS
 } from './constants';
 import { Property } from './models';
 import { PropertiesApiService } from './properties-api.service';
@@ -222,11 +225,12 @@ export class PropertyExcelService {
       throw new Error('Invalid status. Use For Sale or For Rent.');
     }
 
-    const amenities = this.parseList(this.asText(row['amenities']));
-    if (this.asBooleanValue(row['parking'])) {
+    const allowedAmenities = new Set(PROPERTY_AMENITIES_BY_TYPE[type] ?? COMMON_AMENITIES);
+    const amenities = this.parseList(this.asText(row['amenities'])).filter((amenity) => allowedAmenities.has(amenity));
+    if (allowedAmenities.has('parking') && this.asBooleanValue(row['parking'])) {
       amenities.push('parking');
     }
-    if (this.asBooleanValue(row['furnished'])) {
+    if (allowedAmenities.has('furnished') && this.asBooleanValue(row['furnished'])) {
       amenities.push('furnished');
     }
 
@@ -249,12 +253,12 @@ export class PropertyExcelService {
       price,
       currency: this.normalizeCurrency(this.asText(row['currency'])),
       location,
-      bedrooms: this.asNumberValue(row['bedrooms']),
-      bathrooms: this.asNumberValue(row['bathrooms']),
+      bedrooms: PROPERTY_TYPES_WITH_BEDROOMS.includes(type) ? this.asNumberValue(row['bedrooms']) : undefined,
+      bathrooms: PROPERTY_TYPES_WITH_BATHROOMS.includes(type) ? this.asNumberValue(row['bathrooms']) : undefined,
       areaSqm,
-      floor: this.asNumberValue(row['floor']),
-      parking: this.asBooleanValue(row['parking']),
-      furnished: this.asBooleanValue(row['furnished']),
+      floor: type === 'land' ? undefined : this.asNumberValue(row['floor']),
+      parking: allowedAmenities.has('parking') ? this.asBooleanValue(row['parking']) : false,
+      furnished: allowedAmenities.has('furnished') ? this.asBooleanValue(row['furnished']) : false,
       amenities: [...new Set(amenities)],
       images: this.parseList(this.asText(row['images'])),
       ownerName: this.asText(row['ownerName']) || undefined,

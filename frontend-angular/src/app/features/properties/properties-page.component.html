@@ -128,8 +128,8 @@
         <div class="price">{{ formatCurrency(property.price, property.currency) }}</div>
         <div class="stats">
           <span class="pill">{{ 'propertyType.' + property.type | translate }}</span>
-          <span class="pill" *ngIf="property.bedrooms !== undefined">{{ property.bedrooms }} {{ 'units.bed' | translate }}</span>
-          <span class="pill" *ngIf="property.bathrooms !== undefined">{{ property.bathrooms }} {{ 'units.bath' | translate }}</span>
+          <span class="pill" *ngIf="showBedrooms(property)">{{ property.bedrooms }} {{ 'units.bed' | translate }}</span>
+          <span class="pill" *ngIf="showBathrooms(property)">{{ property.bathrooms }} {{ 'units.bath' | translate }}</span>
         </div>
         <div class="toolbar actions-row">
           <a [routerLink]="['/properties', property.id]" class="btn">{{ 'common.view' | translate }}</a>

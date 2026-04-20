@@ -1,5 +1,6 @@
 import { PROPERTY_SOURCE_LABELS } from "@/lib/constants";
 import Link from "next/link";
+import { PropertyShareButton } from "@/components/property-share-button";
 import { formatCurrency } from "@/lib/format";
 import type { Property } from "@/lib/types";
 
@@ -26,6 +27,7 @@ export function PropertyCard({ property }: { property: Property }) {
         </div>
         <div className="actions">
           <Link href={`/properties/${property.id}`} className="btn">View</Link>
+          <PropertyShareButton title={property.title} url={`/properties/${property.id}`} compact />
         </div>
       </div>
     </article>

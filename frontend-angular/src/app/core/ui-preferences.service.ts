@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 
 export type AppLanguage = 'en' | 'ar';
-export type AppTheme = 'dark' | 'light';
 
 @Injectable({ providedIn: 'root' })
 export class UiPreferencesService {
@@ -13,20 +12,11 @@ export class UiPreferencesService {
   private readonly storage = this.document.defaultView?.localStorage;
 
   readonly language = signal<AppLanguage>('en');
-  readonly theme = signal<AppTheme>('dark');
 
   constructor() {
-    this.theme.set(this.readStoredValue<AppTheme>('iqar-theme', 'dark', ['dark', 'light']));
     this.language.set(this.readStoredValue<AppLanguage>('iqar-language', 'en', ['en', 'ar']));
-    this.applyTheme();
     this.applyLanguage();
     this.loadTranslations(this.language());
-  }
-
-  toggleTheme(): void {
-    this.theme.set(this.theme() === 'dark' ? 'light' : 'dark');
-    this.storage?.setItem('iqar-theme', this.theme());
-    this.applyTheme();
   }
 
   toggleLanguage(): void {
@@ -49,10 +39,6 @@ export class UiPreferencesService {
       }, this.dictionary());
 
     return typeof value === 'string' ? value : key;
-  }
-
-  private applyTheme(): void {
-    this.document.documentElement.setAttribute('data-theme', this.theme());
   }
 
   private applyLanguage(): void {

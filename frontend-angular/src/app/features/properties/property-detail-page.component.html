@@ -38,8 +38,8 @@
       <div class="stats">
         <span class="pill">{{ 'propertyPurpose.' + property.purpose | translate }}</span>
         <span class="pill">{{ 'propertyType.' + property.type | translate }}</span>
-        <span class="pill" *ngIf="property.bedrooms !== undefined">{{ property.bedrooms }} {{ 'units.bedrooms' | translate }}</span>
-        <span class="pill" *ngIf="property.bathrooms !== undefined">{{ property.bathrooms }} {{ 'units.bathrooms' | translate }}</span>
+        <span class="pill" *ngIf="showBedrooms(property)">{{ property.bedrooms }} {{ 'units.bedrooms' | translate }}</span>
+        <span class="pill" *ngIf="showBathrooms(property)">{{ property.bathrooms }} {{ 'units.bathrooms' | translate }}</span>
         <span class="pill" *ngIf="property.areaSqm !== undefined">{{ property.areaSqm }} {{ 'units.sqm' | translate }}</span>
       </div>
       <div class="toolbar">
@@ -53,9 +53,9 @@
     <h3>{{ 'propertyDetail.details' | translate }}</h3>
     <div class="grid grid-2">
       <div><span class="label">{{ 'fields.source' | translate }}</span><strong>{{ 'propertySource.' + (property.source || 'direct_owner') | translate }}</strong></div>
-      <div><span class="label">{{ 'fields.floor' | translate }}</span><strong>{{ property.floor ?? ('common.na' | translate) }}</strong></div>
-      <div><span class="label">{{ 'fields.parking' | translate }}</span><strong>{{ property.parking ? ('common.yes' | translate) : ('common.no' | translate) }}</strong></div>
-      <div><span class="label">{{ 'fields.furnished' | translate }}</span><strong>{{ property.furnished ? ('common.yes' | translate) : ('common.no' | translate) }}</strong></div>
+      <div *ngIf="showFloor(property)"><span class="label">{{ 'fields.floor' | translate }}</span><strong>{{ property.floor ?? ('common.na' | translate) }}</strong></div>
+      <div *ngIf="showParking(property)"><span class="label">{{ 'fields.parking' | translate }}</span><strong>{{ property.parking ? ('common.yes' | translate) : ('common.no' | translate) }}</strong></div>
+      <div *ngIf="showFurnished(property)"><span class="label">{{ 'fields.furnished' | translate }}</span><strong>{{ property.furnished ? ('common.yes' | translate) : ('common.no' | translate) }}</strong></div>
       <div>
         <span class="label">{{ 'fields.ownerName' | translate }}</span>
         <strong *ngIf="owner; else ownerFallback">

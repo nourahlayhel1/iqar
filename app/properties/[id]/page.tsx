@@ -1,5 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
+import { PropertyShareButton } from "@/components/property-share-button";
 import { PROPERTY_SOURCE_LABELS } from "@/lib/constants";
 import { readProperties } from "@/lib/data";
 import { formatCurrency, formatDate } from "@/lib/format";
@@ -32,6 +33,7 @@ export default async function PropertyDetailsPage({ params }: { params: { id: st
             {property.bathrooms !== undefined ? <span className="stat-pill">{property.bathrooms} bathrooms</span> : null}
             {property.areaSqm !== undefined ? <span className="stat-pill">{property.areaSqm} sqm</span> : null}
           </div>
+          <PropertyShareButton title={property.title} />
         </div>
       </section>
 

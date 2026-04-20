@@ -77,14 +77,17 @@
   "amenities": {
     "balcony": "شرفة",
     "elevator": "مصعد",
+    "electricity": "كهرباء",
     "furnished": "مفروش",
     "garden": "حديقة",
     "generator": "مولد",
     "parking": "موقف سيارات",
     "pool": "مسبح",
+    "road_access": "وصول طريق",
     "sea_view": "إطلالة بحرية",
     "security": "حراسة",
-    "storage": "مستودع"
+    "storage": "مستودع",
+    "water": "مياه"
   },
   "fields": {
     "address": "العنوان",

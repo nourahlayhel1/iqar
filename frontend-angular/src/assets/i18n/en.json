@@ -77,14 +77,17 @@
   "amenities": {
     "balcony": "Balcony",
     "elevator": "Elevator",
+    "electricity": "Electricity",
     "furnished": "Furnished",
     "garden": "Garden",
     "generator": "Generator",
     "parking": "Parking",
     "pool": "Pool",
+    "road_access": "Road access",
     "sea_view": "Sea view",
     "security": "Security",
-    "storage": "Storage"
+    "storage": "Storage",
+    "water": "Water"
   },
   "fields": {
     "address": "Address",

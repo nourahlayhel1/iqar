@@ -3,7 +3,15 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, of, switchMap, timeout } from 'rxjs';
-import { COMMON_AMENITIES, CURRENCIES, PROPERTY_PURPOSES, PROPERTY_SOURCES, PROPERTY_TYPES } from '../../core/constants';
+import {
+  COMMON_AMENITIES,
+  PROPERTY_AMENITIES_BY_TYPE,
+  PROPERTY_PURPOSES,
+  PROPERTY_SOURCES,
+  PROPERTY_TYPES,
+  PROPERTY_TYPES_WITH_BATHROOMS,
+  PROPERTY_TYPES_WITH_BEDROOMS
+} from '../../core/constants';
 import { Owner, Property } from '../../core/models';
 import { OwnersApiService } from '../../core/owners-api.service';
 import { PropertiesApiService } from '../../core/properties-api.service';
@@ -28,8 +36,6 @@ export class PropertyFormPageComponent {
 
   readonly propertyTypes = PROPERTY_TYPES;
   readonly propertyPurposes = PROPERTY_PURPOSES;
-  readonly currencies = CURRENCIES;
-  readonly commonAmenities = COMMON_AMENITIES;
   readonly typeOptions: UiDropdownOption[] = PROPERTY_TYPES.map((type) => ({
     value: type,
     labelKey: `propertyType.${type}`
@@ -37,10 +43,6 @@ export class PropertyFormPageComponent {
   readonly purposeOptions: UiDropdownOption[] = PROPERTY_PURPOSES.map((purpose) => ({
     value: purpose,
     labelKey: `propertyPurpose.${purpose}`
-  }));
-  readonly currencyOptions: UiDropdownOption[] = CURRENCIES.map((currency) => ({
-    value: currency,
-    label: currency
   }));
   readonly sourceOptions: UiDropdownOption[] = PROPERTY_SOURCES.map((source) => ({
     value: source,
@@ -66,7 +68,6 @@ export class PropertyFormPageComponent {
     purpose: ['sale' as Property['purpose'], Validators.required],
     source: ['direct_owner' as NonNullable<Property['source']>, Validators.required],
     price: [0, [Validators.required, Validators.min(0)]],
-    currency: ['USD' as Property['currency'], Validators.required],
     location: this.fb.nonNullable.group({
       city: ['', Validators.required]
     }),
@@ -81,6 +82,10 @@ export class PropertyFormPageComponent {
   });
 
   constructor() {
+    this.form.controls.type.valueChanges.subscribe((type) => {
+      this.applyPropertyTypeRules(type);
+    });
+
     this.ownersApi.list().subscribe({
       next: (owners) => {
         this.owners = owners;
@@ -112,6 +117,9 @@ export class PropertyFormPageComponent {
       .subscribe({
         next: (property) => {
           if (property) {
+            const amenities = new Set(property.amenities);
+            if (property.parking) amenities.add('parking');
+            if (property.furnished) amenities.add('furnished');
             this.form.patchValue({
               title: property.title,
               description: property.description,
@@ -119,7 +127,6 @@ export class PropertyFormPageComponent {
               purpose: property.purpose,
               source: property.source ?? 'direct_owner',
               price: property.price,
-              currency: property.currency,
               location: {
                 city: property.location.city
               },
@@ -129,9 +136,10 @@ export class PropertyFormPageComponent {
               floor: property.floor ?? null,
               parking: property.parking ?? false,
               furnished: property.furnished ?? false,
-              amenitiesText: property.amenities.join(', '),
+              amenitiesText: [...amenities].join(', '),
               ownerId: property.ownerId ?? ''
             });
+            this.applyPropertyTypeRules(property.type);
             this.existingImages = property.images;
             this.coverImage = property.coverImage || property.images[0] || '';
           }
@@ -153,6 +161,10 @@ export class PropertyFormPageComponent {
     this.loading = true;
     this.error = '';
     const value = this.form.getRawValue();
+    const amenities = value.amenitiesText
+      .split(',')
+      .map((item) => item.trim())
+      .filter((amenity) => this.availableAmenities.includes(amenity));
     const payload = {
       title: value.title,
       description: value.description,
@@ -160,17 +172,17 @@ export class PropertyFormPageComponent {
       purpose: value.purpose,
       source: value.source,
       price: Number(value.price),
-      currency: value.currency,
+      currency: 'USD' as Property['currency'],
       location: {
         city: value.location.city
       },
-      bedrooms: value.bedrooms ?? undefined,
-      bathrooms: value.bathrooms ?? undefined,
+      bedrooms: this.supportsBedrooms(value.type) ? value.bedrooms ?? undefined : undefined,
+      bathrooms: this.supportsBathrooms(value.type) ? value.bathrooms ?? undefined : undefined,
       areaSqm: value.areaSqm ?? undefined,
-      floor: value.floor ?? undefined,
+      floor: this.supportsFloor(value.type) ? value.floor ?? undefined : undefined,
       parking: value.parking,
-      furnished: value.furnished,
-      amenities: value.amenitiesText.split(',').map((item) => item.trim()).filter(Boolean),
+      furnished: this.supportsFurnished(value.type) ? value.furnished : false,
+      amenities,
       coverImage: this.coverImage || undefined,
       images: this.existingImages,
       ownerId: value.ownerId || undefined
@@ -208,10 +220,78 @@ export class PropertyFormPageComponent {
     if (checked) next.add(amenity);
     else next.delete(amenity);
     this.form.controls.amenitiesText.setValue([...next].join(', '));
+
+    if (amenity === 'parking') {
+      this.form.controls.parking.setValue(checked);
+    }
+    if (amenity === 'furnished') {
+      this.form.controls.furnished.setValue(checked);
+    }
   }
 
   hasAmenity(amenity: string): boolean {
     return this.form.controls.amenitiesText.value.split(',').map((item) => item.trim()).filter(Boolean).includes(amenity);
+  }
+
+  get availableAmenities(): string[] {
+    return PROPERTY_AMENITIES_BY_TYPE[this.form.controls.type.value] ?? COMMON_AMENITIES;
+  }
+
+  get showBedrooms(): boolean {
+    return this.supportsBedrooms(this.form.controls.type.value);
+  }
+
+  get showBathrooms(): boolean {
+    return this.supportsBathrooms(this.form.controls.type.value);
+  }
+
+  get showFloor(): boolean {
+    return this.supportsFloor(this.form.controls.type.value);
+  }
+
+  get showFurnished(): boolean {
+    return this.supportsFurnished(this.form.controls.type.value);
+  }
+
+  private applyPropertyTypeRules(type: Property['type']): void {
+    if (!this.supportsBedrooms(type)) {
+      this.form.controls.bedrooms.setValue(null);
+    }
+    if (!this.supportsBathrooms(type)) {
+      this.form.controls.bathrooms.setValue(null);
+    }
+    if (!this.supportsFloor(type)) {
+      this.form.controls.floor.setValue(null);
+    }
+    if (!this.supportsFurnished(type)) {
+      this.form.controls.furnished.setValue(false);
+    }
+
+    const allowedAmenities = new Set(PROPERTY_AMENITIES_BY_TYPE[type] ?? COMMON_AMENITIES);
+    if (!allowedAmenities.has('parking')) {
+      this.form.controls.parking.setValue(false);
+    }
+    const nextAmenities = this.form.controls.amenitiesText.value
+      .split(',')
+      .map((item) => item.trim())
+      .filter((amenity) => amenity && allowedAmenities.has(amenity));
+    this.form.controls.amenitiesText.setValue([...new Set(nextAmenities)].join(', '), { emitEvent: false });
+  }
+
+  private supportsBedrooms(type: Property['type']): boolean {
+    return PROPERTY_TYPES_WITH_BEDROOMS.includes(type);
+  }
+
+  private supportsBathrooms(type: Property['type']): boolean {
+    return PROPERTY_TYPES_WITH_BATHROOMS.includes(type);
+  }
+
+  private supportsFloor(type: Property['type']): boolean {
+    return type !== 'land';
+  }
+
+  private supportsFurnished(type: Property['type']): boolean {
+    return type !== 'land';
   }
 
   chooseImages(event: Event): void {

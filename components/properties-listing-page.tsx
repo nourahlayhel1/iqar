@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { CustomSelect } from "@/components/custom-select";
+import { PropertyShareButton } from "@/components/property-share-button";
 import { formatCurrency } from "@/lib/format";
 import type { Property } from "@/lib/types";
 
@@ -226,26 +227,28 @@ export function PropertiesListingPage({ properties }: { properties: Property[] }
                 const image = property.coverImage || property.images[0];
 
                 return (
-                  <Link key={property.id} href={`/properties/${property.id}`} className="exclusive-card">
-                    <div className="exclusive-media">
-                      {image ? <img src={image} alt={property.title} /> : <div className="image-fallback">Property Preview</div>}
-                      <div className="media-badges">
-                        <span className="badge">For {property.purpose === "sale" ? "Sale" : "Rent"}</span>
-                        {property.purpose === "sale" ? <span className="badge muted-badge">Featured</span> : null}
-                        <span className="favorite-badge" aria-hidden="true">♡</span>
+                  <article key={property.id} className="exclusive-card">
+                    <PropertyShareButton title={property.title} url={`/properties/${property.id}`} iconOnly />
+                    <Link href={`/properties/${property.id}`} className="property-card-link">
+                      <div className="exclusive-media">
+                        {image ? <img src={image} alt={property.title} /> : <div className="image-fallback">Property Preview</div>}
+                        <div className="media-badges">
+                          <span className="badge">For {property.purpose === "sale" ? "Sale" : "Rent"}</span>
+                          {property.purpose === "sale" ? <span className="badge muted-badge">Featured</span> : null}
+                        </div>
                       </div>
-                    </div>
-                    <div className="exclusive-body">
-                      <div className="price">{formatCurrency(property.price, property.currency)}{property.purpose === "rent" ? " /mo" : ""}</div>
-                      <h3>{property.title}</h3>
-                      <p className="listing-location">{property.location.city}</p>
-                      <div className="stats">
-                        <span className="stat-pill stat-bed">{property.bedrooms ?? 0}</span>
-                        <span className="stat-pill stat-bath">{property.bathrooms ?? 0}</span>
-                        <span className="stat-pill stat-area">{property.areaSqm ? `${property.areaSqm} sqm` : "0 sqm"}</span>
+                      <div className="exclusive-body">
+                        <div className="price">{formatCurrency(property.price, property.currency)}{property.purpose === "rent" ? " /mo" : ""}</div>
+                        <h3>{property.title}</h3>
+                        <p className="listing-location">{property.location.city}</p>
+                        <div className="stats">
+                          <span className="stat-pill stat-bed">{property.bedrooms ?? 0}</span>
+                          <span className="stat-pill stat-bath">{property.bathrooms ?? 0}</span>
+                          <span className="stat-pill stat-area">{property.areaSqm ? `${property.areaSqm} sqm` : "0 sqm"}</span>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </article>
                 );
               })
             ) : (

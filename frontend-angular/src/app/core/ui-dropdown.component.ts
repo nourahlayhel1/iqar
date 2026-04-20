@@ -77,10 +77,10 @@ export interface UiDropdownOption {
 
       .dropdown-trigger {
         width: 100%;
-        min-height: 3.35rem;
+        min-height: 2.75rem;
         border: 1px solid var(--line);
-        border-radius: 16px;
-        padding: 0.95rem 1rem;
+        border-radius: 8px;
+        padding: 0.68rem 0.78rem;
         background: var(--input-bg);
         color: var(--text);
         display: flex;
@@ -98,7 +98,7 @@ export interface UiDropdownOption {
       .dropdown-trigger:focus-visible {
         outline: none;
         border-color: var(--accent);
-        box-shadow: 0 0 0 4px rgba(0, 178, 255, 0.14);
+        box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.14);
         transform: translateY(-1px);
       }
 
@@ -133,8 +133,8 @@ export interface UiDropdownOption {
         left: 0;
         right: 0;
         z-index: 2147483647;
-        padding: 0.45rem;
-        border-radius: 18px;
+        padding: 0.35rem;
+        border-radius: 10px;
         border: 1px solid var(--line);
         background: color-mix(in srgb, var(--surface) 88%, transparent);
         box-shadow: 0 20px 50px var(--shadow);
@@ -147,11 +147,11 @@ export interface UiDropdownOption {
       .dropdown-option {
         width: 100%;
         border: 0;
-        border-radius: 14px;
+        border-radius: 8px;
         background: transparent;
         color: var(--text);
         text-align: start;
-        padding: 0.8rem 0.95rem;
+        padding: 0.64rem 0.75rem;
         font-size: 0.92rem;
         font-weight: 600;
         transition:

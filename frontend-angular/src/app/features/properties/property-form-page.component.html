@@ -20,23 +20,27 @@
   <form *ngIf="!loading || mode === 'create'" [formGroup]="form" (ngSubmit)="submit()" class="stack">
     <div class="form-grid">
       <div><label class="label">{{ 'fields.title' | translate }}</label><input formControlName="title"></div>
-      <div><label class="label">{{ 'fields.price' | translate }}</label><input type="number" formControlName="price"></div>
+      <div>
+        <label class="label">{{ 'fields.price' | translate }}</label>
+        <div class="price-input">
+          <span>$</span>
+          <input type="number" formControlName="price">
+        </div>
+      </div>
       <div><label class="label">{{ 'fields.type' | translate }}</label><app-ui-dropdown formControlName="type" [options]="typeOptions" /></div>
       <div><label class="label">{{ 'fields.purpose' | translate }}</label><app-ui-dropdown formControlName="purpose" [options]="purposeOptions" /></div>
       <div><label class="label">{{ 'fields.source' | translate }}</label><app-ui-dropdown formControlName="source" [options]="sourceOptions" /></div>
-      <div><label class="label">{{ 'fields.currency' | translate }}</label><app-ui-dropdown formControlName="currency" [options]="currencyOptions" /></div>
       <div formGroupName="location"><label class="label">{{ 'fields.city' | translate }}</label><input formControlName="city"></div>
-      <div><label class="label">{{ 'fields.bedrooms' | translate }}</label><input type="number" formControlName="bedrooms"></div>
-      <div><label class="label">{{ 'fields.bathrooms' | translate }}</label><input type="number" formControlName="bathrooms"></div>
+      <div *ngIf="showBedrooms"><label class="label">{{ 'fields.bedrooms' | translate }}</label><input type="number" formControlName="bedrooms"></div>
+      <div *ngIf="showBathrooms"><label class="label">{{ 'fields.bathrooms' | translate }}</label><input type="number" formControlName="bathrooms"></div>
       <div><label class="label">{{ 'fields.areaSqm' | translate }}</label><input type="number" formControlName="areaSqm"></div>
-      <div><label class="label">{{ 'fields.floor' | translate }}</label><input type="number" formControlName="floor"></div>
+      <div *ngIf="showFloor"><label class="label">{{ 'fields.floor' | translate }}</label><input type="number" formControlName="floor"></div>
       <div><label class="label">{{ 'fields.ownerName' | translate }}</label><app-ui-dropdown formControlName="ownerId" [options]="ownerOptions" /></div>
     </div>
 
     <div><label class="label">{{ 'fields.description' | translate }}</label><textarea formControlName="description"></textarea></div>
-    <div><label class="label">{{ 'fields.amenitiesCsv' | translate }}</label><input formControlName="amenitiesText"></div>
     <div class="checkbox-grid">
-      <label class="checkbox-item" *ngFor="let amenity of commonAmenities">
+      <label class="checkbox-item" *ngFor="let amenity of availableAmenities">
         <input type="checkbox" [checked]="hasAmenity(amenity)" (change)="addAmenity(amenity, $any($event.target).checked)">
         <span>{{ 'amenities.' + amenity | translate }}</span>
       </label>
@@ -83,11 +87,6 @@
           <button type="button" class="btn-danger" (click)="removeExistingImage(image)">Remove image</button>
         </div>
       </article>
-    </div>
-
-    <div class="checkbox-grid">
-      <label class="checkbox-item"><input type="checkbox" formControlName="parking"><span>{{ 'fields.parking' | translate }}</span></label>
-      <label class="checkbox-item"><input type="checkbox" formControlName="furnished"><span>{{ 'fields.furnished' | translate }}</span></label>
     </div>
 
     <div class="toolbar">

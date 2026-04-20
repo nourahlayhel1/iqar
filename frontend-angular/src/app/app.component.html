@@ -16,40 +16,6 @@
       <div class="shell-actions">
         <button
           type="button"
-          class="shell-toggle"
-          (click)="ui.toggleTheme()"
-          [attr.aria-label]="ui.theme() === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
-        >
-          <svg
-            *ngIf="ui.theme() === 'dark'; else sunIcon"
-            class="toggle-icon"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              d="M21 12.8A9 9 0 1 1 11.2 3 7.2 7.2 0 0 0 21 12.8Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <ng-template #sunIcon>
-            <svg class="toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2" />
-              <path
-                d="M12 2v2.5M12 19.5V22M4.93 4.93 6.7 6.7M17.3 17.3l1.77 1.77M2 12h2.5M19.5 12H22M4.93 19.07 6.7 17.3M17.3 6.7l1.77-1.77"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
-            </svg>
-          </ng-template>
-        </button>
-        <button
-          type="button"
           class="shell-toggle lang-toggle"
           (click)="ui.toggleLanguage()"
           [attr.aria-label]="ui.language() === 'en' ? 'Switch to Arabic' : 'Switch to English'"

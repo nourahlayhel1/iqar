@@ -4,7 +4,14 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { COMMON_AMENITIES, PROPERTY_PURPOSES, PROPERTY_TYPES } from '../../core/constants';
+import {
+  COMMON_AMENITIES,
+  PROPERTY_AMENITIES_BY_TYPE,
+  PROPERTY_PURPOSES,
+  PROPERTY_TYPES,
+  PROPERTY_TYPES_WITH_BATHROOMS,
+  PROPERTY_TYPES_WITH_BEDROOMS
+} from '../../core/constants';
 import { formatCurrency } from '../../core/formatters';
 import { PropertyExcelService } from '../../core/property-excel.service';
 import { PropertiesApiService } from '../../core/properties-api.service';
@@ -31,7 +38,6 @@ export class PropertiesPageComponent {
 
   readonly propertyTypes = PROPERTY_TYPES;
   readonly propertyPurposes = PROPERTY_PURPOSES;
-  readonly amenities = COMMON_AMENITIES;
   readonly formatCurrency = formatCurrency;
   readonly sortOptions: UiDropdownOption[] = [
     { value: 'newest', labelKey: 'sort.newest' },
@@ -102,6 +108,9 @@ export class PropertiesPageComponent {
       .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged())
       .subscribe((type) => {
         this.filtersForm.controls.types.setValue(type ? [type] : []);
+        this.filtersForm.controls.amenities.setValue(
+          this.filtersForm.controls.amenities.value.filter((amenity) => this.amenities.includes(amenity))
+        );
       });
 
     this.filtersForm.valueChanges
@@ -162,6 +171,19 @@ export class PropertiesPageComponent {
     if (checked) next.add(value);
     else next.delete(value);
     control.setValue([...next]);
+  }
+
+  get amenities(): string[] {
+    const selectedType = this.typeFilterControl.value as Property['type'] | '';
+    return selectedType ? PROPERTY_AMENITIES_BY_TYPE[selectedType] ?? COMMON_AMENITIES : COMMON_AMENITIES;
+  }
+
+  showBedrooms(property: Property): boolean {
+    return PROPERTY_TYPES_WITH_BEDROOMS.includes(property.type) && property.bedrooms !== undefined;
+  }
+
+  showBathrooms(property: Property): boolean {
+    return PROPERTY_TYPES_WITH_BATHROOMS.includes(property.type) && property.bathrooms !== undefined;
   }
 
   deleteProperty(id: string): void {

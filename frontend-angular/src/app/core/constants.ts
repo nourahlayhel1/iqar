@@ -16,5 +16,20 @@ export const COMMON_AMENITIES = [
   'garden',
   'security',
   'pool',
-  'furnished'
+  'furnished',
+  'road_access',
+  'water',
+  'electricity'
 ];
+
+export const PROPERTY_AMENITIES_BY_TYPE: Record<PropertyType, string[]> = {
+  apartment: ['sea_view', 'elevator', 'generator', 'parking', 'storage', 'balcony', 'security', 'furnished'],
+  villa: ['sea_view', 'generator', 'parking', 'storage', 'balcony', 'garden', 'security', 'pool', 'furnished'],
+  land: ['sea_view', 'road_access', 'water', 'electricity'],
+  shop: ['generator', 'parking', 'storage', 'security', 'water', 'electricity'],
+  office: ['elevator', 'generator', 'parking', 'storage', 'security', 'furnished'],
+  other: COMMON_AMENITIES
+};
+
+export const PROPERTY_TYPES_WITH_BEDROOMS: PropertyType[] = ['apartment', 'villa'];
+export const PROPERTY_TYPES_WITH_BATHROOMS: PropertyType[] = ['apartment', 'villa', 'shop', 'office', 'other'];

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CustomSelect } from "@/components/custom-select";
+import { PropertyShareButton } from "@/components/property-share-button";
 import { COMMON_AMENITIES, PROPERTY_PURPOSES, PROPERTY_TYPES } from "@/lib/constants";
 import { formatCurrency } from "@/lib/format";
 import { filterAndSortProperties } from "@/lib/property-query";
@@ -451,29 +452,31 @@ export function PropertyCatalog({ properties, countries, cities, areas }: Proper
                   const image = property.coverImage ?? property.images[0];
 
                   return (
-                    <Link key={property.id} href={`/properties/${property.id}`} className="listing-card panel">
-                      <div className="listing-media">
-                        {image ? <img src={image} alt={property.title} /> : <div className="image-fallback">{t.propertyPreview}</div>}
-                        <div className="media-badges">
-                          <span className="badge">For {labelForValue(language, property.purpose)}</span>
-                          <span className="badge muted-badge">Featured</span>
-                          <span className="favorite-badge">♡</span>
+                    <article key={property.id} className="listing-card panel">
+                      <PropertyShareButton title={property.title} url={`/properties/${property.id}`} iconOnly />
+                      <Link href={`/properties/${property.id}`} className="property-card-link">
+                        <div className="listing-media">
+                          {image ? <img src={image} alt={property.title} /> : <div className="image-fallback">{t.propertyPreview}</div>}
+                          <div className="media-badges">
+                            <span className="badge">For {labelForValue(language, property.purpose)}</span>
+                            <span className="badge muted-badge">Featured</span>
+                          </div>
                         </div>
-                      </div>
-                      <div className="listing-body">
-                        <div className="price">{formatCurrency(property.price, property.currency)}</div>
-                        <h3>{property.title}</h3>
-                        <p className="listing-location">{property.location.city}</p>
-                        <p className="listing-description">
-                          {property.description || "Well-positioned listing with strong visibility and a clean, broker-friendly summary."}
-                        </p>
-                        <div className="stats">
-                          {property.bedrooms ? <span className="stat-pill stat-bed">{property.bedrooms}</span> : null}
-                          {property.bathrooms ? <span className="stat-pill stat-bath">{property.bathrooms}</span> : null}
-                          {property.areaSqm ? <span className="stat-pill stat-area">{property.areaSqm} sqm</span> : null}
+                        <div className="listing-body">
+                          <div className="price">{formatCurrency(property.price, property.currency)}</div>
+                          <h3>{property.title}</h3>
+                          <p className="listing-location">{property.location.city}</p>
+                          <p className="listing-description">
+                            {property.description || "Well-positioned listing with strong visibility and a clean, broker-friendly summary."}
+                          </p>
+                          <div className="stats">
+                            {property.bedrooms ? <span className="stat-pill stat-bed">{property.bedrooms}</span> : null}
+                            {property.bathrooms ? <span className="stat-pill stat-bath">{property.bathrooms}</span> : null}
+                            {property.areaSqm ? <span className="stat-pill stat-area">{property.areaSqm} sqm</span> : null}
+                          </div>
                         </div>
-                      </div>
-                    </Link>
+                      </Link>
+                    </article>
                   );
                 })}
               </div>

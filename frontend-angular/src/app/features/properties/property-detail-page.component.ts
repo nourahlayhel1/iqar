@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { of, switchMap } from 'rxjs';
+import { PROPERTY_AMENITIES_BY_TYPE, PROPERTY_TYPES_WITH_BATHROOMS, PROPERTY_TYPES_WITH_BEDROOMS } from '../../core/constants';
 import { formatCurrency } from '../../core/formatters';
 import { Owner, Property } from '../../core/models';
 import { OwnersApiService } from '../../core/owners-api.service';
@@ -62,5 +63,25 @@ export class PropertyDetailPageComponent {
         this.error = error.error?.error ?? this.ui.translate('messages.deleteFailed');
       }
     });
+  }
+
+  showBedrooms(property: Property): boolean {
+    return PROPERTY_TYPES_WITH_BEDROOMS.includes(property.type) && property.bedrooms !== undefined;
+  }
+
+  showBathrooms(property: Property): boolean {
+    return PROPERTY_TYPES_WITH_BATHROOMS.includes(property.type) && property.bathrooms !== undefined;
+  }
+
+  showFloor(property: Property): boolean {
+    return property.type !== 'land';
+  }
+
+  showParking(property: Property): boolean {
+    return PROPERTY_AMENITIES_BY_TYPE[property.type]?.includes('parking') ?? true;
+  }
+
+  showFurnished(property: Property): boolean {
+    return property.type !== 'land';
   }
 }
