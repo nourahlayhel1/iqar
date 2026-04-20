@@ -1,11 +1,15 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 import { PROPERTY_SOURCE_LABELS } from "@/lib/constants";
 import { readProperties } from "@/lib/data";
 import { formatCurrency, formatDate } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
 export default async function PropertyDetailsPage({ params }: { params: { id: string } }) {
+  noStore();
   const properties = await readProperties();
   const property = properties.find((entry) => entry.id === params.id);
   if (!property) notFound();
