@@ -67,9 +67,7 @@
 
       <div class="advanced-filters-body">
         <div class="filters">
-          <div><label class="label">{{ 'fields.country' | translate }}</label><input formControlName="country" /></div>
           <div><label class="label">{{ 'fields.city' | translate }}</label><input formControlName="city" /></div>
-          <div><label class="label">{{ 'fields.area' | translate }}</label><input formControlName="area" /></div>
           <div>
             <label class="label">{{ 'fields.purpose' | translate }}</label>
             <app-ui-dropdown formControlName="purpose" [options]="purposeOptions" />
@@ -124,7 +122,7 @@
       <div class="stack">
         <div>
           <div class="property-purpose">{{ 'propertyPurpose.' + property.purpose | translate }}</div>
-          <div class="eyebrow">{{ property.location.city }}, {{ property.location.area }}</div>
+          <div class="eyebrow">{{ property.location.city }}</div>
           <h3>{{ property.title }}</h3>
         </div>
         <div class="price">{{ formatCurrency(property.price, property.currency) }}</div>

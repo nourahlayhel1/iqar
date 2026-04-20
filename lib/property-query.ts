@@ -4,9 +4,9 @@ import type { Property, PropertyFilters } from "@/lib/types";
 export function filterAndSortProperties(properties: Property[], filters: PropertyFilters): Property[] {
   const filtered = properties.filter((property) => {
     if (!matchesGlobalSearch(property, filters.q)) return false;
-    if (filters.country && property.location.country.toLowerCase() !== filters.country.toLowerCase()) return false;
+    if (filters.country && property.location.country?.toLowerCase() !== filters.country.toLowerCase()) return false;
     if (filters.city && property.location.city.toLowerCase() !== filters.city.toLowerCase()) return false;
-    if (filters.area && property.location.area.toLowerCase() !== filters.area.toLowerCase()) return false;
+    if (filters.area && property.location.area?.toLowerCase() !== filters.area.toLowerCase()) return false;
     if (filters.types?.length && !filters.types.includes(property.type)) return false;
     if (filters.purpose && property.purpose !== filters.purpose) return false;
     if (filters.minPrice !== undefined && property.price < filters.minPrice) return false;

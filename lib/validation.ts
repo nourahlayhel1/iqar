@@ -59,8 +59,8 @@ export function validatePropertyInput(input: unknown): ValidationResult<Omit<Pro
   }
 
   const location = value.location as Record<string, unknown>;
-  if (!isNonEmptyString(location.country) || !isNonEmptyString(location.city) || !isNonEmptyString(location.area)) {
-    return { success: false, message: "Country, city, and area are required." };
+  if (!isNonEmptyString(location.city)) {
+    return { success: false, message: "City is required." };
   }
 
   if (!isStringArray(value.amenities) || !isStringArray(value.images)) {
@@ -114,10 +114,10 @@ export function validatePropertyInput(input: unknown): ValidationResult<Omit<Pro
       negotiable: value.negotiable as boolean | undefined,
       notes: typeof value.notes === "string" ? value.notes.trim() : undefined,
       location: {
-        country: location.country.trim() as string,
+        country: typeof location.country === "string" ? location.country.trim() || undefined : undefined,
         city: location.city.trim() as string,
-        area: location.area.trim() as string,
-        address: typeof location.address === "string" ? location.address.trim() : undefined,
+        area: typeof location.area === "string" ? location.area.trim() || undefined : undefined,
+        address: typeof location.address === "string" ? location.address.trim() || undefined : undefined,
         lat: location.lat as number | undefined,
         lng: location.lng as number | undefined
       },

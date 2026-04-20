@@ -462,7 +462,7 @@ export function PropertyCatalog({ properties, countries, cities, areas }: Proper
                       <div className="listing-body">
                         <div className="price">{formatCurrency(property.price, property.currency)}</div>
                         <h3>{property.title}</h3>
-                        <p className="listing-location">{property.location.area}, {property.location.city}</p>
+                        <p className="listing-location">{property.location.city}</p>
                         <p className="listing-description">
                           {property.description || "Well-positioned listing with strong visibility and a clean, broker-friendly summary."}
                         </p>

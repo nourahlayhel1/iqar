@@ -68,10 +68,7 @@ export class PropertyFormPageComponent {
     price: [0, [Validators.required, Validators.min(0)]],
     currency: ['USD' as Property['currency'], Validators.required],
     location: this.fb.nonNullable.group({
-      country: ['', Validators.required],
-      city: ['', Validators.required],
-      area: ['', Validators.required],
-      address: ['']
+      city: ['', Validators.required]
     }),
     bedrooms: [null as number | null],
     bathrooms: [null as number | null],
@@ -124,10 +121,7 @@ export class PropertyFormPageComponent {
               price: property.price,
               currency: property.currency,
               location: {
-                country: property.location.country,
-                city: property.location.city,
-                area: property.location.area,
-                address: property.location.address ?? ''
+                city: property.location.city
               },
               bedrooms: property.bedrooms ?? null,
               bathrooms: property.bathrooms ?? null,
@@ -168,10 +162,7 @@ export class PropertyFormPageComponent {
       price: Number(value.price),
       currency: value.currency,
       location: {
-        country: value.location.country,
-        city: value.location.city,
-        area: value.location.area,
-        address: value.location.address || undefined
+        city: value.location.city
       },
       bedrooms: value.bedrooms ?? undefined,
       bathrooms: value.bathrooms ?? undefined,

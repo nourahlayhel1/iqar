@@ -1,6 +1,5 @@
 import { PROPERTY_SOURCE_LABELS } from "@/lib/constants";
 import Link from "next/link";
-import { DeleteButton } from "@/components/delete-button";
 import { formatCurrency } from "@/lib/format";
 import type { Property } from "@/lib/types";
 
@@ -13,7 +12,7 @@ export function PropertyCard({ property }: { property: Property }) {
       <div style={{ marginTop: "1rem" }}>
         <div className="card-head">
           <div>
-            <p className="eyebrow">{property.location.city}, {property.location.area}</p>
+            <p className="eyebrow">{property.location.city}</p>
             <h3 style={{ margin: "0.25rem 0 0.2rem" }}>{property.title}</h3>
           </div>
           <span className="badge">{property.purpose} / {property.type}</span>
@@ -27,8 +26,6 @@ export function PropertyCard({ property }: { property: Property }) {
         </div>
         <div className="actions">
           <Link href={`/properties/${property.id}`} className="btn">View</Link>
-          <Link href={`/properties/${property.id}/edit`} className="btn-secondary">Edit</Link>
-          <DeleteButton endpoint={`/api/properties/${property.id}`} redirectTo="/properties" label="Delete" />
         </div>
       </div>
     </article>

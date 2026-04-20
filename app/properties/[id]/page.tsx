@@ -1,6 +1,4 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { DeleteButton } from "@/components/delete-button";
 import { PROPERTY_SOURCE_LABELS } from "@/lib/constants";
 import { readProperties } from "@/lib/data";
 import { formatCurrency, formatDate } from "@/lib/format";
@@ -20,7 +18,7 @@ export default async function PropertyDetailsPage({ params }: { params: { id: st
       <section className="grid two">
         <div className="panel"><div className="image-frame"><img src={heroImage} alt={property.title} /></div></div>
         <div className="panel alt">
-          <p className="eyebrow">{property.location.city}, {property.location.area}</p>
+          <p className="eyebrow">{property.location.city}</p>
           <h1 className="section-title">{property.title}</h1>
           <p className="price">{formatCurrency(property.price, property.currency)}</p>
           <p className="section-subtitle">{property.description}</p>
@@ -30,10 +28,6 @@ export default async function PropertyDetailsPage({ params }: { params: { id: st
             {property.bedrooms !== undefined ? <span className="stat-pill">{property.bedrooms} bedrooms</span> : null}
             {property.bathrooms !== undefined ? <span className="stat-pill">{property.bathrooms} bathrooms</span> : null}
             {property.areaSqm !== undefined ? <span className="stat-pill">{property.areaSqm} sqm</span> : null}
-          </div>
-          <div className="actions">
-            <Link href={`/properties/${property.id}/edit`} className="btn-secondary">Edit</Link>
-            <DeleteButton endpoint={`/api/properties/${property.id}`} redirectTo="/properties" label="Delete" />
           </div>
         </div>
       </section>
@@ -52,8 +46,6 @@ export default async function PropertyDetailsPage({ params }: { params: { id: st
       <section className="panel">
         <h2 className="section-title">Listing details</h2>
         <div className="detail-list">
-          <div className="detail-item"><span className="label">Country</span><strong>{property.location.country}</strong></div>
-          <div className="detail-item"><span className="label">Address</span><strong>{property.location.address || "N/A"}</strong></div>
           <div className="detail-item"><span className="label">Listed by</span><strong>{PROPERTY_SOURCE_LABELS[property.source ?? "direct_owner"]}</strong></div>
           <div className="detail-item"><span className="label">Floor</span><strong>{property.floor ?? "N/A"}</strong></div>
           <div className="detail-item"><span className="label">Parking</span><strong>{property.parking ? "Yes" : "No"}</strong></div>

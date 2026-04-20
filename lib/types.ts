@@ -4,9 +4,9 @@ export type PropertySource = "direct_owner" | "broker";
 export type Currency = "USD" | "LBP" | "SAR";
 
 export interface PropertyLocation {
-  country: string;
+  country?: string;
   city: string;
-  area: string;
+  area?: string;
   address?: string;
   lat?: number;
   lng?: number;

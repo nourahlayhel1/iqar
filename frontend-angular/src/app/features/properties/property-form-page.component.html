@@ -25,10 +25,7 @@
       <div><label class="label">{{ 'fields.purpose' | translate }}</label><app-ui-dropdown formControlName="purpose" [options]="purposeOptions" /></div>
       <div><label class="label">{{ 'fields.source' | translate }}</label><app-ui-dropdown formControlName="source" [options]="sourceOptions" /></div>
       <div><label class="label">{{ 'fields.currency' | translate }}</label><app-ui-dropdown formControlName="currency" [options]="currencyOptions" /></div>
-      <div formGroupName="location"><label class="label">{{ 'fields.country' | translate }}</label><input formControlName="country"></div>
       <div formGroupName="location"><label class="label">{{ 'fields.city' | translate }}</label><input formControlName="city"></div>
-      <div formGroupName="location"><label class="label">{{ 'fields.area' | translate }}</label><input formControlName="area"></div>
-      <div formGroupName="location"><label class="label">{{ 'fields.address' | translate }}</label><input formControlName="address"></div>
       <div><label class="label">{{ 'fields.bedrooms' | translate }}</label><input type="number" formControlName="bedrooms"></div>
       <div><label class="label">{{ 'fields.bathrooms' | translate }}</label><input type="number" formControlName="bathrooms"></div>
       <div><label class="label">{{ 'fields.areaSqm' | translate }}</label><input type="number" formControlName="areaSqm"></div>

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { DeleteButton } from "@/components/delete-button";
 import { readCustomers, readProperties, readRequests } from "@/lib/data";
 import { formatDate } from "@/lib/format";
 import { findMatchesForRequest } from "@/lib/match";
@@ -22,7 +21,6 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
             <h1 className="section-title">{customer.name}</h1>
             <p className="section-subtitle">{customer.phone}</p>
           </div>
-          <div className="actions"><Link href={`/customers/${customer.id}/edit`} className="btn-secondary">Edit</Link><DeleteButton endpoint={`/api/customers/${customer.id}`} redirectTo="/customers" label="Delete" /></div>
         </div>
       </section>
 
@@ -62,7 +60,7 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
                         ))}
                       </div>
                     ) : null}
-                    <div className="actions"><Link href={`/requests/${request.id}/edit`} className="btn-secondary">Edit</Link><Link href={`/requests?customerId=${customer.id}`} className="btn-ghost">View matches</Link></div>
+                    <div className="actions"><Link href={`/requests?customerId=${customer.id}`} className="btn-ghost">View matches</Link></div>
                   </div>
                 );
               })}

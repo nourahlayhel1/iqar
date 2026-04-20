@@ -22,7 +22,7 @@ const emptyValues: PropertyInput = {
   price: 0,
   currency: "USD",
   source: "direct_owner",
-  location: { country: "", city: "", area: "", address: "" },
+  location: { city: "" },
   bedrooms: undefined,
   bathrooms: undefined,
   areaSqm: undefined,
@@ -35,9 +35,9 @@ const emptyValues: PropertyInput = {
   ownerPhone: ""
 };
 
-export function PropertyForm({ mode, initialData, propertyId }: { mode: "create" | "edit"; initialData?: Property; propertyId?: string }) {
+export function PropertyForm() {
   const router = useRouter();
-  const base = initialData ?? emptyValues;
+  const base = emptyValues;
   const [form, setForm] = useState<PropertyInput>({ ...base, location: { ...base.location } });
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [saving, setSaving] = useState(false);
@@ -53,8 +53,8 @@ export function PropertyForm({ mode, initialData, propertyId }: { mode: "create"
     body.append("payload", JSON.stringify(form));
     selectedImages.forEach((image) => body.append("images", image));
 
-    const response = await fetch(mode === "create" ? "/api/properties" : `/api/properties/${propertyId}`, {
-      method: mode === "create" ? "POST" : "PUT",
+    const response = await fetch("/api/properties", {
+      method: "POST",
       body
     });
 
@@ -65,13 +65,13 @@ export function PropertyForm({ mode, initialData, propertyId }: { mode: "create"
       return;
     }
 
-    router.push(mode === "create" ? `/properties/${data?.property?.id}` : `/properties/${propertyId}`);
+    router.push(`/properties/${data?.property?.id}`);
     router.refresh();
   }
 
   return (
     <form className="panel" onSubmit={handleSubmit}>
-      <h1 className="section-title">{mode === "create" ? "Add property" : "Edit property"}</h1>
+      <h1 className="section-title">Add property</h1>
       <p className="section-subtitle">Capture listing basics, owner details, and media links.</p>
       {error ? <div className="notice" style={{ marginTop: "1rem" }}>{error}</div> : null}
 
@@ -89,10 +89,7 @@ export function PropertyForm({ mode, initialData, propertyId }: { mode: "create"
         <div><label className="label">Type</label><select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as Property["type"] })}>{PROPERTY_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}</select></div>
         <div><label className="label">Purpose</label><select value={form.purpose} onChange={(e) => setForm({ ...form, purpose: e.target.value as Property["purpose"] })}>{PROPERTY_PURPOSES.map((purpose) => <option key={purpose} value={purpose}>{purpose}</option>)}</select></div>
         <div><label className="label">Currency</label><select value={form.currency} onChange={(e) => setForm({ ...form, currency: e.target.value as Property["currency"] })}>{CURRENCIES.map((currency) => <option key={currency} value={currency}>{currency}</option>)}</select></div>
-        <div><label className="label">Country</label><input value={form.location.country} onChange={(e) => setForm({ ...form, location: { ...form.location, country: e.target.value } })} required /></div>
         <div><label className="label">City</label><input value={form.location.city} onChange={(e) => setForm({ ...form, location: { ...form.location, city: e.target.value } })} required /></div>
-        <div><label className="label">Area</label><input value={form.location.area} onChange={(e) => setForm({ ...form, location: { ...form.location, area: e.target.value } })} required /></div>
-        <div><label className="label">Address</label><input value={form.location.address ?? ""} onChange={(e) => setForm({ ...form, location: { ...form.location, address: e.target.value } })} /></div>
         <div><label className="label">Bedrooms</label><input type="number" min="0" value={form.bedrooms ?? ""} onChange={(e) => setForm({ ...form, bedrooms: e.target.value ? Number(e.target.value) : undefined })} /></div>
         <div><label className="label">Bathrooms</label><input type="number" min="0" value={form.bathrooms ?? ""} onChange={(e) => setForm({ ...form, bathrooms: e.target.value ? Number(e.target.value) : undefined })} /></div>
         <div><label className="label">Area sqm</label><input type="number" min="0" value={form.areaSqm ?? ""} onChange={(e) => setForm({ ...form, areaSqm: e.target.value ? Number(e.target.value) : undefined })} /></div>
@@ -124,9 +121,7 @@ export function PropertyForm({ mode, initialData, propertyId }: { mode: "create"
           />
         </label>
         <p className="muted" style={{ marginTop: "0.5rem" }}>
-          {mode === "create"
-            ? "Selected images will be uploaded from your computer files."
-            : "Selected images will be uploaded from your computer files. Existing images are kept unless removed below."}
+          Selected images will be uploaded from your computer files.
         </p>
       </div>
 
@@ -162,7 +157,7 @@ export function PropertyForm({ mode, initialData, propertyId }: { mode: "create"
         <label className="checkbox-item"><input type="checkbox" checked={form.parking ?? false} onChange={(e) => setForm({ ...form, parking: e.target.checked })} /><span>Parking</span></label>
         <label className="checkbox-item"><input type="checkbox" checked={form.furnished ?? false} onChange={(e) => setForm({ ...form, furnished: e.target.checked })} /><span>Furnished</span></label>
       </div>
-      <div className="actions"><button type="submit" className="btn" disabled={saving}>{saving ? "Saving..." : mode === "create" ? "Create property" : "Save changes"}</button></div>
+      <div className="actions"><button type="submit" className="btn" disabled={saving}>{saving ? "Saving..." : "Create property"}</button></div>
     </form>
   );
 }

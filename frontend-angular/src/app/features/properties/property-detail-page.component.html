@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="panel hero">
-      <div class="eyebrow">{{ property.location.city }}, {{ property.location.area }}</div>
+      <div class="eyebrow">{{ property.location.city }}</div>
       <h2>{{ property.title }}</h2>
       <div class="price">{{ formatCurrency(property.price, property.currency) }}</div>
       <p class="muted">{{ property.description }}</p>
@@ -52,8 +52,6 @@
   <section class="panel">
     <h3>{{ 'propertyDetail.details' | translate }}</h3>
     <div class="grid grid-2">
-      <div><span class="label">{{ 'fields.country' | translate }}</span><strong>{{ property.location.country }}</strong></div>
-      <div><span class="label">{{ 'fields.address' | translate }}</span><strong>{{ property.location.address || ('common.na' | translate) }}</strong></div>
       <div><span class="label">{{ 'fields.source' | translate }}</span><strong>{{ 'propertySource.' + (property.source || 'direct_owner') | translate }}</strong></div>
       <div><span class="label">{{ 'fields.floor' | translate }}</span><strong>{{ property.floor ?? ('common.na' | translate) }}</strong></div>
       <div><span class="label">{{ 'fields.parking' | translate }}</span><strong>{{ property.parking ? ('common.yes' | translate) : ('common.no' | translate) }}</strong></div>

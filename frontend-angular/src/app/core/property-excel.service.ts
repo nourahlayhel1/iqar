@@ -39,10 +39,7 @@ const TEMPLATE_COLUMNS = [
   { header: 'notes', key: 'notes', width: 26 },
   { header: 'title', key: 'title', width: 30 },
   { header: 'description', key: 'description', width: 36 },
-  { header: 'country', key: 'country', width: 14 },
   { header: 'city', key: 'city', width: 18 },
-  { header: 'area', key: 'area', width: 18 },
-  { header: 'address', key: 'address', width: 24 },
   { header: 'floor', key: 'floor', width: 10 },
   { header: 'amenities', key: 'amenities', width: 36 },
   { header: 'images', key: 'images', width: 42 }
@@ -205,7 +202,7 @@ export class PropertyExcelService {
     const description =
       this.asText(row['description']) ||
       this.asText(row['notes']) ||
-      `${this.toTitleCase(type)} in ${location.city}, ${location.area}`;
+      `${this.toTitleCase(type)} in ${location.city}`;
     const pricePerSqm = this.asNumberValue(row['pricePerSqm']);
     const areaSqm = this.asNumberValue(row['size_sqm']) ?? this.asNumberValue(row['areaSqm']);
     const price =
@@ -213,8 +210,8 @@ export class PropertyExcelService {
       this.asNumberValue(row['price']) ??
       (pricePerSqm !== undefined && areaSqm !== undefined ? pricePerSqm * areaSqm : 0);
 
-    if (!title || !description || !location.country || !location.city || !location.area) {
-      throw new Error('Missing required title, description, or location fields.');
+    if (!title || !description || !location.city) {
+      throw new Error('Missing required title, description, or city fields.');
     }
 
     if (!type) {
@@ -267,7 +264,6 @@ export class PropertyExcelService {
 
   private resolveLocation(row: Record<string, string | number | boolean | undefined>) {
     const city = this.asText(row['city']);
-    const area = this.asText(row['area']);
     const locationText = this.asText(row['location']);
     const locationParts = locationText
       .split('/')
@@ -275,10 +271,7 @@ export class PropertyExcelService {
       .filter(Boolean);
 
     return {
-      country: this.asText(row['country']) || 'Lebanon',
-      city: city || locationParts[0] || 'Unknown',
-      area: area || locationParts[1] || locationParts[0] || 'Unknown',
-      address: this.asText(row['address']) || undefined
+      city: city || locationParts[0] || 'Unknown'
     };
   }
 

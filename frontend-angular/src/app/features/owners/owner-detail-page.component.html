@@ -56,7 +56,7 @@
       <a class="panel linked-property" *ngFor="let property of properties" [routerLink]="['/properties', property.id]">
         <div>
           <h4>{{ property.title }}</h4>
-          <p class="muted">{{ property.location.city }}, {{ property.location.area }}</p>
+          <p class="muted">{{ property.location.city }}</p>
         </div>
         <strong>{{ formatCurrency(property.price, property.currency) }}</strong>
       </a>

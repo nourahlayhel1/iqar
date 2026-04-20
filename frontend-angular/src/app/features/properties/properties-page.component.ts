@@ -62,9 +62,7 @@ export class PropertiesPageComponent {
 
   readonly filtersForm = this.fb.nonNullable.group({
     q: '',
-    country: '',
     city: '',
-    area: '',
     purpose: '',
     minPrice: '',
     maxPrice: '',
@@ -86,9 +84,7 @@ export class PropertiesPageComponent {
         this.filtersForm.patchValue(
           {
             q: params.get('q') ?? '',
-            country: params.get('country') ?? '',
             city: params.get('city') ?? '',
-            area: params.get('area') ?? '',
             purpose: params.get('purpose') ?? '',
             minPrice: params.get('minPrice') ?? '',
             maxPrice: params.get('maxPrice') ?? '',
@@ -115,9 +111,7 @@ export class PropertiesPageComponent {
           relativeTo: this.route,
           queryParams: {
             q: value.q || null,
-            country: value.country || null,
             city: value.city || null,
-            area: value.area || null,
             purpose: value.purpose || null,
             minPrice: value.minPrice || null,
             maxPrice: value.maxPrice || null,
@@ -139,9 +133,7 @@ export class PropertiesPageComponent {
 
           return this.api.list({
             q: params.get('q') ?? undefined,
-            country: params.get('country') ?? undefined,
             city: params.get('city') ?? undefined,
-            area: params.get('area') ?? undefined,
             purpose: params.get('purpose') ?? undefined,
             minPrice: params.get('minPrice') ? Number(params.get('minPrice')) : undefined,
             maxPrice: params.get('maxPrice') ? Number(params.get('maxPrice')) : undefined,
@@ -209,9 +201,7 @@ export class PropertiesPageComponent {
       this.api
         .list({
           q: this.filtersForm.controls.q.value || undefined,
-          country: this.filtersForm.controls.country.value || undefined,
           city: this.filtersForm.controls.city.value || undefined,
-          area: this.filtersForm.controls.area.value || undefined,
           purpose: this.filtersForm.controls.purpose.value || undefined,
           minPrice: this.filtersForm.controls.minPrice.value ? Number(this.filtersForm.controls.minPrice.value) : undefined,
           maxPrice: this.filtersForm.controls.maxPrice.value ? Number(this.filtersForm.controls.maxPrice.value) : undefined,
@@ -235,9 +225,7 @@ export class PropertiesPageComponent {
   clearFilters(): void {
     this.filtersForm.reset({
       q: '',
-      country: '',
       city: '',
-      area: '',
       purpose: '',
       minPrice: '',
       maxPrice: '',

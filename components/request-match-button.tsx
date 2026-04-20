@@ -37,7 +37,7 @@ export function RequestMatchButton({ requestId }: { requestId: string }) {
             <div className="grid properties">
               {matches.map((property) => (
                 <div key={property.id} className="card">
-                  <p className="eyebrow">{property.location.city}, {property.location.area}</p>
+                  <p className="eyebrow">{property.location.city}</p>
                   <h3 style={{ margin: "0.25rem 0" }}>{property.title}</h3>
                   <p className="price">{formatCurrency(property.price, property.currency)}</p>
                   <div className="actions">

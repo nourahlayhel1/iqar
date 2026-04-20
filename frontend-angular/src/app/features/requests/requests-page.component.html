@@ -58,7 +58,7 @@
     <div *ngIf="matchesByRequestId[request.id] as matches" class="stack matches-section">
       <div *ngIf="matches.length; else noMatches" class="grid cards">
         <article class="panel" *ngFor="let property of matches">
-          <div class="eyebrow">{{ property.location.city }}, {{ property.location.area }}</div>
+          <div class="eyebrow">{{ property.location.city }}</div>
           <h4>{{ property.title }}</h4>
           <div class="price">{{ formatCurrency(property.price, property.currency) }}</div>
           <a [routerLink]="['/properties', property.id]" class="btn-secondary">{{ 'requests.viewProperty' | translate }}</a>

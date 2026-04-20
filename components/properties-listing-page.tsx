@@ -238,7 +238,7 @@ export function PropertiesListingPage({ properties }: { properties: Property[] }
                     <div className="exclusive-body">
                       <div className="price">{formatCurrency(property.price, property.currency)}{property.purpose === "rent" ? " /mo" : ""}</div>
                       <h3>{property.title}</h3>
-                      <p className="listing-location">{property.location.area}, {property.location.city}</p>
+                      <p className="listing-location">{property.location.city}</p>
                       <div className="stats">
                         <span className="stat-pill stat-bed">{property.bedrooms ?? 0}</span>
                         <span className="stat-pill stat-bath">{property.bathrooms ?? 0}</span>

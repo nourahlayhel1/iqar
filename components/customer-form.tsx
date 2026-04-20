@@ -6,13 +6,13 @@ import type { Customer } from "@/lib/types";
 
 type CustomerInput = Omit<Customer, "id" | "createdAt" | "updatedAt">;
 
-export function CustomerForm({ mode, initialData, customerId }: { mode: "create" | "edit"; initialData?: Customer; customerId?: string }) {
+export function CustomerForm() {
   const router = useRouter();
   const [form, setForm] = useState<CustomerInput>({
-    name: initialData?.name ?? "",
-    phone: initialData?.phone ?? "",
-    altPhone: initialData?.altPhone ?? "",
-    notes: initialData?.notes ?? ""
+    name: "",
+    phone: "",
+    altPhone: "",
+    notes: ""
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -22,8 +22,8 @@ export function CustomerForm({ mode, initialData, customerId }: { mode: "create"
     setSaving(true);
     setError("");
 
-    const response = await fetch(mode === "create" ? "/api/customers" : `/api/customers/${customerId}`, {
-      method: mode === "create" ? "POST" : "PUT",
+    const response = await fetch("/api/customers", {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form)
     });
@@ -35,13 +35,13 @@ export function CustomerForm({ mode, initialData, customerId }: { mode: "create"
       return;
     }
 
-    router.push(mode === "create" ? `/customers/${data?.customer?.id}` : `/customers/${customerId}`);
+    router.push(`/customers/${data?.customer?.id}`);
     router.refresh();
   }
 
   return (
     <form className="panel" onSubmit={handleSubmit}>
-      <h1 className="section-title">{mode === "create" ? "Add customer" : "Edit customer"}</h1>
+      <h1 className="section-title">Add customer</h1>
       <p className="section-subtitle">Store primary contact details and office notes.</p>
       {error ? <div className="notice" style={{ marginTop: "1rem" }}>{error}</div> : null}
       <div className="form-grid" style={{ marginTop: "1rem" }}>
@@ -50,7 +50,7 @@ export function CustomerForm({ mode, initialData, customerId }: { mode: "create"
         <div><label className="label">Alternative phone</label><input value={form.altPhone ?? ""} onChange={(e) => setForm({ ...form, altPhone: e.target.value })} /></div>
       </div>
       <div style={{ marginTop: "1rem" }}><label className="label">Notes</label><textarea value={form.notes ?? ""} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
-      <div className="actions"><button type="submit" className="btn" disabled={saving}>{saving ? "Saving..." : mode === "create" ? "Create customer" : "Save changes"}</button></div>
+      <div className="actions"><button type="submit" className="btn" disabled={saving}>{saving ? "Saving..." : "Create customer"}</button></div>
     </form>
   );
 }

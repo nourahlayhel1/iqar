@@ -12,7 +12,7 @@ export function propertyMatchesRequest(property: Property, request: CustomerRequ
   if (request.preferredLocations.length > 0) {
     const locationMatch = request.preferredLocations.some((location) => {
       const cityMatches = property.location.city.toLowerCase() === location.city.toLowerCase();
-      const areaMatches = !location.area || property.location.area.toLowerCase() === location.area.toLowerCase();
+      const areaMatches = !location.area || property.location.area?.toLowerCase() === location.area.toLowerCase();
       return cityMatches && areaMatches;
     });
 
