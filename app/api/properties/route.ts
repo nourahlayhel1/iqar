@@ -4,7 +4,7 @@ import { getDataFilePath, readOwners, readProperties, updateCollection } from "@
 import { readPropertyRequestPayload, savePropertyImages } from "@/lib/property-images";
 import { filterAndSortProperties, propertyFiltersFromSearchParams } from "@/lib/property-query";
 import { validatePropertyInput } from "@/lib/validation";
-import type { Property } from "@/lib/types";
+import type { Owner, Property } from "@/lib/types";
 
 export const runtime = "nodejs";
 
@@ -35,11 +35,38 @@ export async function POST(request: Request) {
       ownerPhone: undefined
     };
 
+    const owners = await readOwners();
+
     if (validation.data.ownerId) {
-      const owners = await readOwners();
       const owner = owners.find((entry) => entry.id === validation.data.ownerId);
       if (!owner) return jsonResponse(request, { error: "Owner not found." }, { status: 400 });
       ownerFields = { ownerId: owner.id, ownerName: owner.name, ownerPhone: owner.phone };
+    } else if (validation.data.ownerName && validation.data.ownerPhone) {
+      const existingOwner = owners.find(
+        (entry) =>
+          entry.name.trim().toLowerCase() === validation.data.ownerName?.trim().toLowerCase() &&
+          entry.phone.trim() === validation.data.ownerPhone?.trim()
+      );
+
+      if (existingOwner) {
+        ownerFields = {
+          ownerId: existingOwner.id,
+          ownerName: existingOwner.name,
+          ownerPhone: existingOwner.phone
+        };
+      } else {
+        const now = new Date().toISOString();
+        const owner: Owner = {
+          id: uuidv4(),
+          name: validation.data.ownerName,
+          phone: validation.data.ownerPhone,
+          documents: [],
+          createdAt: now,
+          updatedAt: now
+        };
+        await updateCollection<Owner>(getDataFilePath("owners.json"), (current) => [...current, owner]);
+        ownerFields = { ownerId: owner.id, ownerName: owner.name, ownerPhone: owner.phone };
+      }
     }
 
     const uploadedImages = await savePropertyImages(validation.data.title, imageFiles, coverImageUploadIndex);

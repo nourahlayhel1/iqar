@@ -73,6 +73,7 @@ export function validatePropertyInput(input: unknown): ValidationResult<Omit<Pro
     !isOptionalNumber(value.areaSqm) ||
     !isOptionalNumber(value.floor) ||
     !isOptionalNumber(value.propertyNumber) ||
+    !isOptionalNumber(value.lotNumber) ||
     !isOptionalNumber(value.pricePerSqm) ||
     !isOptionalNumber(location.lat) ||
     !isOptionalNumber(location.lng) ||
@@ -91,6 +92,13 @@ export function validatePropertyInput(input: unknown): ValidationResult<Omit<Pro
     return { success: false, message: "Property counts and area must be non-negative." };
   }
 
+  const ownerId = typeof value.ownerId === "string" ? value.ownerId.trim() : "";
+  const ownerName = typeof value.ownerName === "string" ? value.ownerName.trim() : "";
+  const ownerPhone = typeof value.ownerPhone === "string" ? value.ownerPhone.trim() : "";
+  if (!ownerId && (!ownerName || !ownerPhone)) {
+    return { success: false, message: "Please select an existing owner/broker or enter both name and phone." };
+  }
+
   return {
     success: true,
     data: {
@@ -102,6 +110,7 @@ export function validatePropertyInput(input: unknown): ValidationResult<Omit<Pro
       currency: value.currency as Property["currency"],
       propertyCode: typeof value.propertyCode === "string" ? value.propertyCode.trim() : undefined,
       propertyNumber: value.propertyNumber as number | undefined,
+      lotNumber: value.lotNumber as number | undefined,
       source: PROPERTY_SOURCES.includes(value.source as PropertySource)
         ? (value.source as PropertySource)
         : "direct_owner",
@@ -130,9 +139,9 @@ export function validatePropertyInput(input: unknown): ValidationResult<Omit<Pro
       amenities: (value.amenities as string[]).map((item) => item.trim()).filter(Boolean),
       coverImage: typeof value.coverImage === "string" ? value.coverImage.trim() || undefined : undefined,
       images: (value.images as string[]).map((item) => item.trim()).filter(Boolean),
-      ownerId: typeof value.ownerId === "string" ? value.ownerId.trim() || undefined : undefined,
-      ownerName: typeof value.ownerName === "string" ? value.ownerName.trim() : undefined,
-      ownerPhone: typeof value.ownerPhone === "string" ? value.ownerPhone.trim() : undefined
+      ownerId: ownerId || undefined,
+      ownerName: ownerName || undefined,
+      ownerPhone: ownerPhone || undefined
     }
   };
 }

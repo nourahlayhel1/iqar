@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, of, switchMap, timeout } from 'rxjs';
 import {
@@ -22,7 +22,7 @@ import { UiPreferencesService } from '../../core/ui-preferences.service';
 @Component({
   selector: 'app-property-form-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslatePipe, UiDropdownComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslatePipe, UiDropdownComponent],
   templateUrl: './property-form-page.component.html',
   styleUrl: './property-form-page.component.scss'
 })
@@ -48,9 +48,13 @@ export class PropertyFormPageComponent {
     value: source,
     labelKey: `propertySource.${source}`
   }));
+  readonly existingContactMode = 'existing';
+  readonly newContactMode = 'new';
 
   owners: Owner[] = [];
   ownerOptions: UiDropdownOption[] = [{ value: '', label: 'N/A' }];
+  contactModeOptions: UiDropdownOption[] = [{ value: 'new', labelKey: 'propertyForm.createNewContact' }];
+  contactMode: 'existing' | 'new' = 'new';
   mode: 'create' | 'edit' = 'create';
   propertyId = '';
   selectedImages: File[] = [];
@@ -68,8 +72,12 @@ export class PropertyFormPageComponent {
     purpose: ['sale' as Property['purpose'], Validators.required],
     source: ['direct_owner' as NonNullable<Property['source']>, Validators.required],
     price: [0, [Validators.required, Validators.min(0)]],
+    propertyNumber: [null as number | null],
+    lotNumber: [null as number | null],
     location: this.fb.nonNullable.group({
-      city: ['', Validators.required]
+      city: ['', Validators.required],
+      area: [''],
+      address: ['']
     }),
     bedrooms: [null as number | null],
     bathrooms: [null as number | null],
@@ -78,12 +86,29 @@ export class PropertyFormPageComponent {
     parking: [false],
     furnished: [false],
     amenitiesText: [''],
-    ownerId: ['']
+    ownerId: [''],
+    ownerName: [''],
+    ownerPhone: ['']
   });
 
   constructor() {
     this.form.controls.type.valueChanges.subscribe((type) => {
       this.applyPropertyTypeRules(type);
+    });
+
+    this.form.controls.ownerId.valueChanges.subscribe((ownerId) => {
+      if (this.contactMode !== 'existing') {
+        return;
+      }
+
+      const owner = this.owners.find((entry) => entry.id === ownerId);
+      this.form.patchValue(
+        {
+          ownerName: owner?.name ?? '',
+          ownerPhone: owner?.phone ?? ''
+        },
+        { emitEvent: false }
+      );
     });
 
     this.ownersApi.list().subscribe({
@@ -96,6 +121,31 @@ export class PropertyFormPageComponent {
             label: `${owner.name} - ${owner.phone}`
           }))
         ];
+
+        this.contactModeOptions = owners.length
+          ? [
+              { value: this.existingContactMode, labelKey: 'propertyForm.selectExistingContact' },
+              { value: this.newContactMode, labelKey: 'propertyForm.createNewContact' }
+            ]
+          : [{ value: this.newContactMode, labelKey: 'propertyForm.createNewContact' }];
+
+        if (this.mode === 'create') {
+          if (owners.length) {
+            this.setContactMode('existing');
+            this.form.patchValue({ ownerId: owners[0].id }, { emitEvent: true });
+          } else {
+            this.setContactMode('new');
+          }
+        } else if (this.contactMode === 'existing' && this.form.controls.ownerId.value) {
+          const selectedOwner = owners.find((entry) => entry.id === this.form.controls.ownerId.value);
+          this.form.patchValue(
+            {
+              ownerName: selectedOwner?.name ?? this.form.controls.ownerName.value,
+              ownerPhone: selectedOwner?.phone ?? this.form.controls.ownerPhone.value
+            },
+            { emitEvent: false }
+          );
+        }
       }
     });
 
@@ -127,8 +177,12 @@ export class PropertyFormPageComponent {
               purpose: property.purpose,
               source: property.source ?? 'direct_owner',
               price: property.price,
+              propertyNumber: property.propertyNumber ?? null,
+              lotNumber: property.lotNumber ?? null,
               location: {
-                city: property.location.city
+                city: property.location.city,
+                area: property.location.area ?? '',
+                address: property.location.address ?? ''
               },
               bedrooms: property.bedrooms ?? null,
               bathrooms: property.bathrooms ?? null,
@@ -137,8 +191,11 @@ export class PropertyFormPageComponent {
               parking: property.parking ?? false,
               furnished: property.furnished ?? false,
               amenitiesText: [...amenities].join(', '),
-              ownerId: property.ownerId ?? ''
+              ownerId: property.ownerId ?? '',
+              ownerName: property.ownerName ?? '',
+              ownerPhone: property.ownerPhone ?? ''
             });
+            this.setContactMode(property.ownerId ? 'existing' : 'new');
             this.applyPropertyTypeRules(property.type);
             this.existingImages = property.images;
             this.coverImage = property.coverImage || property.images[0] || '';
@@ -172,9 +229,13 @@ export class PropertyFormPageComponent {
       purpose: value.purpose,
       source: value.source,
       price: Number(value.price),
+      propertyNumber: value.propertyNumber ?? undefined,
+      lotNumber: value.type === 'apartment' ? value.lotNumber ?? undefined : undefined,
       currency: 'USD' as Property['currency'],
       location: {
-        city: value.location.city
+        city: value.location.city,
+        area: value.location.area.trim() || undefined,
+        address: value.location.address.trim() || undefined
       },
       bedrooms: this.supportsBedrooms(value.type) ? value.bedrooms ?? undefined : undefined,
       bathrooms: this.supportsBathrooms(value.type) ? value.bathrooms ?? undefined : undefined,
@@ -185,8 +246,16 @@ export class PropertyFormPageComponent {
       amenities,
       coverImage: this.coverImage || undefined,
       images: this.existingImages,
-      ownerId: value.ownerId || undefined
+      ownerId: this.contactMode === 'existing' ? value.ownerId || undefined : undefined,
+      ownerName: this.contactMode === 'new' ? value.ownerName.trim() || undefined : value.ownerName || undefined,
+      ownerPhone: this.contactMode === 'new' ? value.ownerPhone.trim() || undefined : value.ownerPhone || undefined
     };
+
+    if (!payload.ownerId && (!payload.ownerName || !payload.ownerPhone)) {
+      this.error = this.ui.translate('propertyForm.contactRequired');
+      this.loading = false;
+      return;
+    }
 
     const request$ = this.mode === 'create'
       ? this.api.create(payload, this.selectedImages, this.selectedCoverImageIndex)
@@ -249,8 +318,60 @@ export class PropertyFormPageComponent {
     return this.supportsFloor(this.form.controls.type.value);
   }
 
+  get showLotNumber(): boolean {
+    return this.form.controls.type.value === 'apartment';
+  }
+
   get showFurnished(): boolean {
     return this.supportsFurnished(this.form.controls.type.value);
+  }
+
+  get isExistingContactMode(): boolean {
+    return this.contactMode === 'existing';
+  }
+
+  get contactNameLabel(): string {
+    return this.form.controls.source.value === 'broker'
+      ? this.ui.translate('propertyForm.brokerName')
+      : this.ui.translate('fields.ownerName');
+  }
+
+  get contactPhoneLabel(): string {
+    return this.form.controls.source.value === 'broker'
+      ? this.ui.translate('propertyForm.brokerPhone')
+      : this.ui.translate('fields.ownerPhone');
+  }
+
+  get contactModeLabel(): string {
+    return this.form.controls.source.value === 'broker'
+      ? this.ui.translate('propertyForm.brokerSource')
+      : this.ui.translate('propertyForm.ownerSource');
+  }
+
+  setContactMode(mode: 'existing' | 'new'): void {
+    this.contactMode = mode;
+
+    if (mode === 'existing') {
+      const selectedOwner = this.owners.find((entry) => entry.id === this.form.controls.ownerId.value) ?? this.owners[0];
+      this.form.patchValue(
+        {
+          ownerId: selectedOwner?.id ?? '',
+          ownerName: selectedOwner?.name ?? '',
+          ownerPhone: selectedOwner?.phone ?? ''
+        },
+        { emitEvent: false }
+      );
+      return;
+    }
+
+    this.form.patchValue(
+      {
+        ownerId: '',
+        ownerName: '',
+        ownerPhone: ''
+      },
+      { emitEvent: false }
+    );
   }
 
   private applyPropertyTypeRules(type: Property['type']): void {
@@ -262,6 +383,9 @@ export class PropertyFormPageComponent {
     }
     if (!this.supportsFloor(type)) {
       this.form.controls.floor.setValue(null);
+    }
+    if (type !== 'apartment') {
+      this.form.controls.lotNumber.setValue(null);
     }
     if (!this.supportsFurnished(type)) {
       this.form.controls.furnished.setValue(false);

@@ -2,7 +2,8 @@ import { corsOptions, jsonResponse } from "@/lib/api-response";
 import { getDataFilePath, readOwners, readProperties, updateCollection } from "@/lib/data";
 import { readPropertyRequestPayload, savePropertyImages } from "@/lib/property-images";
 import { validatePropertyInput } from "@/lib/validation";
-import type { Property } from "@/lib/types";
+import { v4 as uuidv4 } from "uuid";
+import type { Owner, Property } from "@/lib/types";
 
 export const runtime = "nodejs";
 
@@ -37,11 +38,34 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       ownerPhone: undefined
     };
 
+    const owners = await readOwners();
+
     if (validation.data.ownerId) {
-      const owners = await readOwners();
       const owner = owners.find((entry) => entry.id === validation.data.ownerId);
       if (!owner) return jsonResponse(request, { error: "Owner not found." }, { status: 400 });
       ownerFields = { ownerId: owner.id, ownerName: owner.name, ownerPhone: owner.phone };
+    } else if (validation.data.ownerName && validation.data.ownerPhone) {
+      const existingOwner = owners.find(
+        (entry) =>
+          entry.name.trim().toLowerCase() === validation.data.ownerName?.trim().toLowerCase() &&
+          entry.phone.trim() === validation.data.ownerPhone?.trim()
+      );
+
+      if (existingOwner) {
+        ownerFields = { ownerId: existingOwner.id, ownerName: existingOwner.name, ownerPhone: existingOwner.phone };
+      } else {
+        const now = new Date().toISOString();
+        const owner: Owner = {
+          id: uuidv4(),
+          name: validation.data.ownerName,
+          phone: validation.data.ownerPhone,
+          documents: [],
+          createdAt: now,
+          updatedAt: now
+        };
+        await updateCollection<Owner>(getDataFilePath("owners.json"), (current) => [...current, owner]);
+        ownerFields = { ownerId: owner.id, ownerName: owner.name, ownerPhone: owner.phone };
+      }
     }
 
     const nextPhotoNumber = imagePathsNextPhotoNumber(validation.data.images, validation.data.coverImage);

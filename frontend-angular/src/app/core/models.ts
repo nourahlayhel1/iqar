@@ -23,6 +23,7 @@ export interface Property {
   location: PropertyLocation;
   propertyCode?: string;
   propertyNumber?: number;
+  lotNumber?: number;
   source?: PropertySource;
   agentName?: string;
   listingStatus?: string;

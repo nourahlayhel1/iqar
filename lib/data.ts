@@ -35,6 +35,8 @@ interface PropertyRow {
   purpose: Property["purpose"];
   price: number | string;
   currency: Property["currency"];
+  property_number: number | null;
+  lot_number: number | null;
   source: Property["source"];
   country: string | null;
   city: string | null;
@@ -312,7 +314,7 @@ async function fetchProperties(): Promise<Property[]> {
   const { data, error } = await supabase
     .from("properties")
     .select(
-      "id, title, description, type, purpose, price, currency, source, country, city, area, address, bedrooms, bathrooms, area_sqm, floor, parking, furnished, owner_id, owner_name, owner_phone, cover_image, created_at, updated_at, property_amenities(amenity), property_images(image_url, sort_order)"
+      "id, title, description, type, purpose, price, currency, property_number, lot_number, source, country, city, area, address, bedrooms, bathrooms, area_sqm, floor, parking, furnished, owner_id, owner_name, owner_phone, cover_image, created_at, updated_at, property_amenities(amenity), property_images(image_url, sort_order)"
     )
     .order("created_at", { ascending: false });
 
@@ -326,6 +328,8 @@ async function fetchProperties(): Promise<Property[]> {
     purpose: row.purpose,
     price: Number(row.price),
     currency: row.currency,
+    propertyNumber: row.property_number ?? undefined,
+    lotNumber: row.lot_number ?? undefined,
     source: row.source ?? "direct_owner",
     location: {
       country: row.country ?? "",
@@ -448,6 +452,8 @@ async function upsertProperties(properties: Property[]): Promise<void> {
     purpose: property.purpose,
     price: property.price,
     currency: property.currency,
+    property_number: property.propertyNumber ?? null,
+    lot_number: property.lotNumber ?? null,
     source: property.source ?? "direct_owner",
     country: property.location.country ?? null,
     city: property.location.city,

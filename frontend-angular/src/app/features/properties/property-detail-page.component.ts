@@ -84,4 +84,8 @@ export class PropertyDetailPageComponent {
   showFurnished(property: Property): boolean {
     return property.type !== 'land';
   }
+
+  showLotNumber(property: Property): boolean {
+    return property.type === 'apartment' && property.lotNumber !== undefined;
+  }
 }

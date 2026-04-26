@@ -8,7 +8,7 @@ for select
 to public
 using (bucket_id = 'property-images');
 
-create policy "property-images app upload"
+creMate policy "property-images app upload"
 on storage.objects
 for insert
 to anon, authenticated

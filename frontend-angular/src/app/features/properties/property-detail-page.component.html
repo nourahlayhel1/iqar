@@ -52,6 +52,17 @@
   <section class="panel">
     <h3>{{ 'propertyDetail.details' | translate }}</h3>
     <div class="grid grid-2">
+      <div><span class="label">{{ 'fields.propertyNumber' | translate }}</span><strong>{{ property.propertyNumber ?? ('common.na' | translate) }}</strong></div>
+      <div *ngIf="showLotNumber(property)"><span class="label">{{ 'fields.lotNumber' | translate }}</span><strong>{{ property.lotNumber }}</strong></div>
+      <div><span class="label">{{ 'fields.city' | translate }}</span><strong>{{ property.location.city || ('common.na' | translate) }}</strong></div>
+      <div><span class="label">{{ 'fields.area' | translate }}</span><strong>{{ property.location.area || ('common.na' | translate) }}</strong></div>
+      <div>
+        <span class="label">{{ 'fields.addressLink' | translate }}</span>
+        <strong *ngIf="property.location.address; else noAddressLink">
+          <a [href]="property.location.address" target="_blank" rel="noreferrer">{{ property.location.address }}</a>
+        </strong>
+        <ng-template #noAddressLink><strong>{{ 'common.na' | translate }}</strong></ng-template>
+      </div>
       <div><span class="label">{{ 'fields.source' | translate }}</span><strong>{{ 'propertySource.' + (property.source || 'direct_owner') | translate }}</strong></div>
       <div *ngIf="showFloor(property)"><span class="label">{{ 'fields.floor' | translate }}</span><strong>{{ property.floor ?? ('common.na' | translate) }}</strong></div>
       <div *ngIf="showParking(property)"><span class="label">{{ 'fields.parking' | translate }}</span><strong>{{ property.parking ? ('common.yes' | translate) : ('common.no' | translate) }}</strong></div>
