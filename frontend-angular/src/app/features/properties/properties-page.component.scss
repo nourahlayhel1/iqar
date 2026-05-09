@@ -18,9 +18,9 @@ h3 {
 }
 
 .advanced-filters {
-  border-radius: 22px;
+  border-radius: 10px;
   border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--surface) 44%, transparent);
+  background: var(--surface);
   overflow: hidden;
 }
 
@@ -90,8 +90,9 @@ h3 {
 }
 
 .property-card:hover {
-  border-color: rgba(0, 178, 255, 0.18);
-  transform: translateY(-2px);
+  border-color: rgba(201, 169, 110, 0.42);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-4px);
 }
 
 .property-purpose {
@@ -101,10 +102,10 @@ h3 {
   margin-top: 0.25rem;
   margin-bottom: 0.65rem;
   padding: 0.28rem 0.72rem;
-  border-radius: 999px;
-  background: rgba(0, 178, 255, 0.1);
-  border: 1px solid rgba(0, 178, 255, 0.25);
-  color: #00b2ff;
+  border-radius: 0;
+  background: var(--luxury-black);
+  border: 1px solid var(--luxury-black);
+  color: var(--luxury-white);
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;

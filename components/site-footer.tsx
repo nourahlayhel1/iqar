@@ -19,8 +19,7 @@ export function SiteFooter() {
         <div className="footer-grid">
           <div className="footer-brand">
             <Link href="/" className="site-brand footer-logo" aria-label="IQAR home">
-              <span className="brand-mark">I</span>
-              <span>IQAR <strong>Estates</strong></span>
+              <img className="site-logo footer-site-logo" src="/assets/brand/iqar-logo.png" alt="IQAR" />
             </Link>
             <p>Curating exceptional properties for discerning clients. Experience a refined real estate journey.</p>
             <div className="social-links" aria-label="Social links">

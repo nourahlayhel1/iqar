@@ -30,10 +30,6 @@ export function validatePropertyInput(input: unknown): ValidationResult<Omit<Pro
 
   const value = input as Record<string, unknown>;
 
-  if (!isNonEmptyString(value.title) || !isNonEmptyString(value.description)) {
-    return { success: false, message: "Title and description are required." };
-  }
-
   if (!PROPERTY_TYPES.includes(value.type as Property["type"])) {
     return { success: false, message: "Invalid property type." };
   }
@@ -59,9 +55,6 @@ export function validatePropertyInput(input: unknown): ValidationResult<Omit<Pro
   }
 
   const location = value.location as Record<string, unknown>;
-  if (!isNonEmptyString(location.city)) {
-    return { success: false, message: "City is required." };
-  }
 
   if (!isStringArray(value.amenities) || !isStringArray(value.images)) {
     return { success: false, message: "Amenities and images must be arrays of strings." };
@@ -95,15 +88,15 @@ export function validatePropertyInput(input: unknown): ValidationResult<Omit<Pro
   const ownerId = typeof value.ownerId === "string" ? value.ownerId.trim() : "";
   const ownerName = typeof value.ownerName === "string" ? value.ownerName.trim() : "";
   const ownerPhone = typeof value.ownerPhone === "string" ? value.ownerPhone.trim() : "";
-  if (!ownerId && (!ownerName || !ownerPhone)) {
-    return { success: false, message: "Please select an existing owner/broker or enter both name and phone." };
+  if ((ownerName && !ownerPhone) || (!ownerName && ownerPhone)) {
+    return { success: false, message: "Enter both contact name and phone, or leave both blank." };
   }
 
   return {
     success: true,
     data: {
-      title: value.title.trim() as string,
-      description: value.description.trim() as string,
+      title: typeof value.title === "string" && value.title.trim() ? value.title.trim() : "Untitled property",
+      description: typeof value.description === "string" ? value.description.trim() : "",
       type: value.type as Property["type"],
       purpose: value.purpose as Property["purpose"],
       price: value.price as number,
@@ -124,7 +117,7 @@ export function validatePropertyInput(input: unknown): ValidationResult<Omit<Pro
       notes: typeof value.notes === "string" ? value.notes.trim() : undefined,
       location: {
         country: typeof location.country === "string" ? location.country.trim() || undefined : undefined,
-        city: location.city.trim() as string,
+        city: typeof location.city === "string" ? location.city.trim() : "",
         area: typeof location.area === "string" ? location.area.trim() || undefined : undefined,
         address: typeof location.address === "string" ? location.address.trim() || undefined : undefined,
         lat: location.lat as number | undefined,

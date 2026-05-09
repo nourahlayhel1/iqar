@@ -202,15 +202,11 @@
   "properties": {
     "advancedFilters": "فلاتر متقدمة",
     "addProperty": "إضافة عقار",
-    "downloadTemplate": "تنزيل قالب Excel",
     "emptyState": "لا توجد عقارات.",
     "eyebrow": "العقارات",
     "filtersSubtitle": "",
     "filtersTitle": "بحث",
     "foundSuffix": "عقار",
-    "importedCount": "عدد العقارات المستوردة:",
-    "importExcel": "استيراد Excel",
-    "importingExcel": "جاري الاستيراد...",
     "subtitle": "",
     "title": "العقارات"
   },

@@ -11,7 +11,7 @@ const extensionByMimeType: Record<string, string> = {
   "image/avif": ".avif"
 };
 
-function slugifyFolderName(value: string): string {
+export function slugifyPropertyImageFolderName(value: string): string {
   const slug = value
     .trim()
     .toLowerCase()
@@ -63,7 +63,7 @@ export async function savePropertyImages(
   if (!imageFiles.length) return [];
 
   const supabase = getSupabaseStorageClient();
-  const folderName = slugifyFolderName(propertyTitle);
+  const folderName = slugifyPropertyImageFolderName(propertyTitle);
 
   let nextPhotoNumber = startingPhotoNumber;
 

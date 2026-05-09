@@ -8,7 +8,8 @@ h2 {
   gap: 0.55rem;
 }
 
-.price-input {
+.price-input,
+.unit-input {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
@@ -21,12 +22,18 @@ h2 {
     box-shadow 160ms ease;
 }
 
-.price-input:focus-within {
+.unit-input {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.price-input:focus-within,
+.unit-input:focus-within {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.14);
 }
 
-.price-input span {
+.price-input span,
+.unit-input span {
   align-self: stretch;
   display: grid;
   place-items: center;
@@ -37,14 +44,23 @@ h2 {
   font-weight: 800;
 }
 
-.price-input input {
+.unit-input span {
+  border-inline-start: 1px solid var(--line);
+  border-inline-end: 0;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.price-input input,
+.unit-input input {
   border: 0;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
 }
 
-.price-input input:focus {
+.price-input input:focus,
+.unit-input input:focus {
   box-shadow: none;
   transform: none;
 }
@@ -57,14 +73,16 @@ h2 {
 .upload-preview-grid,
 .existing-images {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 220px));
   gap: 0.75rem;
+  align-items: start;
 }
 
 .upload-image-card,
 .existing-image-card {
   display: grid;
   gap: 0.55rem;
+  max-width: 220px;
   padding: 0.75rem;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -83,7 +101,7 @@ h2 {
 .upload-image-card img,
 .existing-image-card img {
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: 8px;
   background: var(--surface);

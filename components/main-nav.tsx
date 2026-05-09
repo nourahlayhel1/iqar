@@ -15,8 +15,7 @@ export function MainNav() {
   return (
     <header className="site-header">
       <Link href="/" className="site-brand" aria-label="IQAR home">
-        <span className="brand-mark">I</span>
-        <span>IQAR <strong>Estates</strong></span>
+        <img className="site-logo" src="/assets/brand/iqar-logo.png" alt="IQAR" />
       </Link>
       <div className="site-actions">
         <nav className="nav-links" aria-label="Primary navigation">

@@ -284,12 +284,19 @@ textarea:focus {
 .site-brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  min-width: max-content;
+  flex: 0 0 auto;
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.15rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
+}
+
+.site-logo {
+  width: clamp(150px, 14vw, 220px);
+  height: 68px;
+  display: block;
+  object-fit: contain;
+  object-position: left center;
 }
 
 .site-brand strong {
@@ -2074,6 +2081,11 @@ textarea:focus {
 
 .footer-logo {
   color: var(--luxury-white);
+}
+
+.footer-site-logo {
+  width: 220px;
+  height: 86px;
 }
 
 .footer-brand p,

@@ -8,19 +8,6 @@
       </p>
     </div>
     <div class="toolbar actions-row">
-      <button type="button" class="btn-secondary" (click)="downloadExcelTemplate()">
-        {{ 'properties.downloadTemplate' | translate }}
-      </button>
-      <input
-        #excelInput
-        type="file"
-        accept=".xlsx"
-        hidden
-        (change)="importExcelFile(excelInput.files?.[0] || null); excelInput.value = ''"
-      />
-      <button type="button" class="btn-secondary" (click)="excelInput.click()" [disabled]="importing">
-        {{ importing ? ('properties.importingExcel' | translate) : ('properties.importExcel' | translate) }}
-      </button>
       <a routerLink="/properties/new" class="btn">{{ 'properties.addProperty' | translate }}</a>
     </div>
   </div>
@@ -96,7 +83,6 @@
 </section>
 
 <section *ngIf="error" class="error-box">{{ error }}</section>
-<section *ngIf="importStatus" class="panel">{{ importStatus }}</section>
 <section *ngIf="loading" class="grid cards">
   <article class="panel skeleton-stack" *ngFor="let item of [1, 2, 3, 4, 5, 6]">
     <div class="skeleton skeleton-box"></div>

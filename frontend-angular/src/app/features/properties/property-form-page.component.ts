@@ -50,6 +50,8 @@ export class PropertyFormPageComponent {
   }));
   readonly existingContactMode = 'existing';
   readonly newContactMode = 'new';
+  private readonly maxImageUploadBytes = 650_000;
+  private readonly maxSingleImageRequestBytes = 2_000_000;
 
   owners: Owner[] = [];
   ownerOptions: UiDropdownOption[] = [{ value: '', label: 'N/A' }];
@@ -64,18 +66,19 @@ export class PropertyFormPageComponent {
   coverImage = '';
   loading = false;
   error = '';
+  priceDisplay = '0';
 
   readonly form = this.fb.nonNullable.group({
-    title: ['', Validators.required],
-    description: ['', Validators.required],
-    type: ['apartment' as Property['type'], Validators.required],
-    purpose: ['sale' as Property['purpose'], Validators.required],
-    source: ['direct_owner' as NonNullable<Property['source']>, Validators.required],
-    price: [0, [Validators.required, Validators.min(0)]],
+    title: [''],
+    description: [''],
+    type: ['apartment' as Property['type']],
+    purpose: ['sale' as Property['purpose']],
+    source: ['direct_owner' as NonNullable<Property['source']>],
+    price: [0, [Validators.min(0)]],
     propertyNumber: [null as number | null],
     lotNumber: [null as number | null],
     location: this.fb.nonNullable.group({
-      city: ['', Validators.required],
+      city: [''],
       area: [''],
       address: ['']
     }),
@@ -195,6 +198,7 @@ export class PropertyFormPageComponent {
               ownerName: property.ownerName ?? '',
               ownerPhone: property.ownerPhone ?? ''
             });
+            this.priceDisplay = this.formatPrice(property.price);
             this.setContactMode(property.ownerId ? 'existing' : 'new');
             this.applyPropertyTypeRules(property.type);
             this.existingImages = property.images;
@@ -223,8 +227,8 @@ export class PropertyFormPageComponent {
       .map((item) => item.trim())
       .filter((amenity) => this.availableAmenities.includes(amenity));
     const payload = {
-      title: value.title,
-      description: value.description,
+      title: value.title.trim(),
+      description: value.description.trim(),
       type: value.type,
       purpose: value.purpose,
       source: value.source,
@@ -233,7 +237,7 @@ export class PropertyFormPageComponent {
       lotNumber: value.type === 'apartment' ? value.lotNumber ?? undefined : undefined,
       currency: 'USD' as Property['currency'],
       location: {
-        city: value.location.city,
+        city: value.location.city.trim(),
         area: value.location.area.trim() || undefined,
         address: value.location.address.trim() || undefined
       },
@@ -250,12 +254,6 @@ export class PropertyFormPageComponent {
       ownerName: this.contactMode === 'new' ? value.ownerName.trim() || undefined : value.ownerName || undefined,
       ownerPhone: this.contactMode === 'new' ? value.ownerPhone.trim() || undefined : value.ownerPhone || undefined
     };
-
-    if (!payload.ownerId && (!payload.ownerName || !payload.ownerPhone)) {
-      this.error = this.ui.translate('propertyForm.contactRequired');
-      this.loading = false;
-      return;
-    }
 
     const request$ = this.mode === 'create'
       ? this.api.create(payload, this.selectedImages, this.selectedCoverImageIndex)
@@ -278,6 +276,58 @@ export class PropertyFormPageComponent {
             : error.error?.error ?? this.ui.translate('messages.savePropertyFailed');
       }
     });
+  }
+
+  updatePrice(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const numericValue = this.parsePrice(input.value);
+    this.form.controls.price.setValue(numericValue, { emitEvent: false });
+    this.priceDisplay = input.value.trim() ? this.formatPrice(numericValue) : '';
+    input.value = this.priceDisplay;
+  }
+
+  moveToNextField(keyboardEvent: KeyboardEvent): void {
+    if (!['Enter', 'ArrowRight', 'ArrowLeft', 'Next'].includes(keyboardEvent.key)) {
+      return;
+    }
+
+    const target = keyboardEvent.target as HTMLElement | null;
+
+    if (!target || target instanceof HTMLTextAreaElement) {
+      return;
+    }
+
+    const isDropdownTrigger = target instanceof HTMLButtonElement && target.classList.contains('dropdown-trigger');
+    if (target instanceof HTMLButtonElement && (!isDropdownTrigger || keyboardEvent.key === 'Enter')) {
+      return;
+    }
+
+    if (target instanceof HTMLInputElement && ['checkbox', 'file', 'radio', 'submit', 'button'].includes(target.type)) {
+      return;
+    }
+
+    const form = target.closest('form');
+    if (!form) {
+      return;
+    }
+
+    const focusable = Array.from(
+      form.querySelectorAll<HTMLElement>(
+        'input:not([type="hidden"]), textarea, button, [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((element) => {
+      const control = element as HTMLInputElement | HTMLButtonElement | HTMLTextAreaElement;
+      return !control.disabled && !element.hasAttribute('hidden') && element.offsetParent !== null;
+    });
+
+    const currentIndex = focusable.indexOf(target);
+    const nextField = keyboardEvent.key === 'ArrowLeft' ? focusable[currentIndex - 1] : focusable[currentIndex + 1];
+    if (!nextField) {
+      return;
+    }
+
+    keyboardEvent.preventDefault();
+    nextField.focus();
   }
 
   addAmenity(amenity: string, checked: boolean): void {
@@ -418,19 +468,112 @@ export class PropertyFormPageComponent {
     return type !== 'land';
   }
 
-  chooseImages(event: Event): void {
+  private parsePrice(value: string): number {
+    const normalized = value.replace(/,/g, '').replace(/[^\d.]/g, '');
+    const parts = normalized.split('.');
+    const price = Number(parts.length > 1 ? `${parts[0]}.${parts.slice(1).join('')}` : normalized);
+    return Number.isFinite(price) ? price : 0;
+  }
+
+  private formatPrice(value: number): string {
+    return new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: 2
+    }).format(value);
+  }
+
+  async chooseImages(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
-    const newImages = Array.from(input.files ?? []);
-    const newPreviews = newImages.map((image) => ({
+    const resizedImages = await Promise.all(Array.from(input.files ?? []).map((image) => this.resizeImageForUpload(image)));
+    const acceptedImages: File[] = [];
+
+    for (const image of resizedImages) {
+      if (image.size > this.maxSingleImageRequestBytes) {
+        this.error = 'One or more images are still too large after compression. Please choose a smaller image.';
+        continue;
+      }
+
+      acceptedImages.push(image);
+    }
+
+    if (!acceptedImages.length) {
+      input.value = '';
+      return;
+    }
+
+    if (acceptedImages.length && resizedImages.some((image, index) => image.size < (input.files?.[index]?.size ?? image.size))) {
+      this.error = '';
+    }
+
+    const newPreviews = acceptedImages.map((image) => ({
       fileName: image.name,
       previewUrl: URL.createObjectURL(image)
     }));
-    this.selectedImages = [...this.selectedImages, ...newImages];
+    this.selectedImages = [...this.selectedImages, ...acceptedImages];
     this.selectedImagePreviews = [...this.selectedImagePreviews, ...newPreviews];
     if (!this.coverImage && this.selectedCoverImageIndex < 0 && this.selectedImages.length) {
       this.selectedCoverImageIndex = 0;
     }
     input.value = '';
+  }
+
+  private async resizeImageForUpload(file: File): Promise<File> {
+    if (!file.type.startsWith('image/') || file.type === 'image/gif') {
+      return file;
+    }
+
+    const maxDimension = 1400;
+    const imageUrl = URL.createObjectURL(file);
+
+    try {
+      const image = new Image();
+      image.src = imageUrl;
+      await image.decode();
+
+      const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
+      if (scale === 1 && file.size <= this.maxImageUploadBytes) {
+        return file;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+      canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+      const context = canvas.getContext('2d');
+      if (!context) {
+        return file;
+      }
+
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      const blob = await this.canvasToSizedJpeg(canvas);
+      if (!blob || blob.size >= file.size) {
+        return file;
+      }
+
+      const resizedName = file.name.replace(/\.[^.]+$/, '') || 'property-image';
+      return new File([blob], `${resizedName}.jpg`, { type: 'image/jpeg', lastModified: Date.now() });
+    } catch {
+      return file;
+    } finally {
+      URL.revokeObjectURL(imageUrl);
+    }
+  }
+
+  private async canvasToSizedJpeg(canvas: HTMLCanvasElement): Promise<Blob | null> {
+    const qualities = [0.78, 0.7, 0.62, 0.54];
+    let smallestBlob: Blob | null = null;
+
+    for (const quality of qualities) {
+      const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', quality));
+      if (!blob) {
+        continue;
+      }
+
+      smallestBlob = !smallestBlob || blob.size < smallestBlob.size ? blob : smallestBlob;
+      if (blob.size <= this.maxImageUploadBytes) {
+        return blob;
+      }
+    }
+
+    return smallestBlob;
   }
 
   removeExistingImage(image: string): void {

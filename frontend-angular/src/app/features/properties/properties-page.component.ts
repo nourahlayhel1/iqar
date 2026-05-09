@@ -13,7 +13,6 @@ import {
   PROPERTY_TYPES_WITH_BEDROOMS
 } from '../../core/constants';
 import { formatCurrency } from '../../core/formatters';
-import { PropertyExcelService } from '../../core/property-excel.service';
 import { PropertiesApiService } from '../../core/properties-api.service';
 import { Property } from '../../core/models';
 import { TranslatePipe } from '../../core/translate.pipe';
@@ -34,7 +33,6 @@ export class PropertiesPageComponent {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly ui = inject(UiPreferencesService);
-  private readonly excel = inject(PropertyExcelService);
 
   readonly propertyTypes = PROPERTY_TYPES;
   readonly propertyPurposes = PROPERTY_PURPOSES;
@@ -62,9 +60,7 @@ export class PropertiesPageComponent {
 
   properties: Property[] = [];
   loading = true;
-  importing = false;
   error = '';
-  importStatus = '';
 
   readonly filtersForm = this.fb.nonNullable.group({
     q: '',
@@ -197,51 +193,6 @@ export class PropertiesPageComponent {
         this.error = error.error?.error ?? this.ui.translate('messages.deleteFailed');
       }
     });
-  }
-
-  async downloadExcelTemplate(): Promise<void> {
-    this.error = '';
-    await this.excel.downloadTemplate();
-  }
-
-  async importExcelFile(file: File | null): Promise<void> {
-    if (!file) {
-      return;
-    }
-
-    this.importing = true;
-    this.error = '';
-    this.importStatus = '';
-
-    try {
-      const result = await this.excel.importFile(file);
-      this.importStatus = `${this.ui.translate('properties.importedCount')} ${result.importedCount}`;
-      if (result.errors.length) {
-        this.error = result.errors.slice(0, 8).join('\n');
-      }
-
-      this.api
-        .list({
-          q: this.filtersForm.controls.q.value || undefined,
-          city: this.filtersForm.controls.city.value || undefined,
-          purpose: this.filtersForm.controls.purpose.value || undefined,
-          minPrice: this.filtersForm.controls.minPrice.value ? Number(this.filtersForm.controls.minPrice.value) : undefined,
-          maxPrice: this.filtersForm.controls.maxPrice.value ? Number(this.filtersForm.controls.maxPrice.value) : undefined,
-          minBedrooms: this.filtersForm.controls.minBedrooms.value
-            ? Number(this.filtersForm.controls.minBedrooms.value)
-            : undefined,
-          sort: this.filtersForm.controls.sort.value as 'newest' | 'oldest' | 'priceAsc' | 'priceDesc',
-          types: this.filtersForm.controls.types.value,
-          amenities: this.filtersForm.controls.amenities.value
-        })
-        .subscribe((properties) => {
-          this.properties = properties;
-        });
-    } catch (error) {
-      this.error = error instanceof Error ? error.message : String(error);
-    } finally {
-      this.importing = false;
-    }
   }
 
   clearFilters(): void {

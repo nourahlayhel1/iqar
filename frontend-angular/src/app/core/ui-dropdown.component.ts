@@ -33,8 +33,11 @@ export interface UiDropdownOption {
         type="button"
         class="dropdown-trigger"
         [disabled]="disabled"
+        [attr.aria-label]="ariaLabel || null"
         [attr.aria-expanded]="open"
+        aria-haspopup="listbox"
         (click)="toggle()"
+        (keydown)="handleTriggerKeydown($event)"
         (blur)="markAsTouched()"
       >
         <span class="dropdown-value" [class.placeholder]="!selectedOption">
@@ -52,13 +55,16 @@ export interface UiDropdownOption {
         </svg>
       </button>
 
-      <div class="dropdown-panel" *ngIf="open">
+      <div class="dropdown-panel" role="listbox" *ngIf="open">
         <button
           type="button"
           class="dropdown-option"
           *ngFor="let option of options"
           [class.active]="option.value === value"
+          [attr.aria-selected]="option.value === value"
+          role="option"
           (click)="selectOption(option.value)"
+          (keydown)="handleOptionKeydown($event, option.value)"
         >
           {{ optionLabel(option) }}
         </button>
@@ -77,16 +83,20 @@ export interface UiDropdownOption {
 
       .dropdown-trigger {
         width: 100%;
-        min-height: 2.75rem;
+        min-height: 46px;
         border: 1px solid var(--line);
         border-radius: 8px;
-        padding: 0.68rem 0.78rem;
-        background: var(--input-bg);
+        padding: 0.85rem 0.95rem;
+        background:
+          linear-gradient(45deg, transparent 50%, var(--luxury-black) 50%) calc(100% - 1.22rem) calc(50% - 0.13rem) / 0.32rem 0.32rem no-repeat,
+          linear-gradient(135deg, var(--luxury-black) 50%, transparent 50%) calc(100% - 0.95rem) calc(50% - 0.13rem) / 0.32rem 0.32rem no-repeat,
+          linear-gradient(90deg, rgba(10, 10, 10, 0.08), rgba(10, 10, 10, 0.08)) calc(100% - 2.35rem) 50% / 1px 1.8rem no-repeat,
+          #ffffff;
         color: var(--text);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 1rem;
+        gap: 2.5rem;
         transition:
           border-color 160ms ease,
           box-shadow 160ms ease,
@@ -98,8 +108,7 @@ export interface UiDropdownOption {
       .dropdown-trigger:focus-visible {
         outline: none;
         border-color: var(--accent);
-        box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.14);
-        transform: translateY(-1px);
+        box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.16);
       }
 
       .dropdown-value {
@@ -108,7 +117,7 @@ export interface UiDropdownOption {
         text-overflow: ellipsis;
         white-space: nowrap;
         font-size: 0.95rem;
-        font-weight: 600;
+        font-weight: 800;
       }
 
       .dropdown-value.placeholder {
@@ -119,7 +128,7 @@ export interface UiDropdownOption {
         width: 22px;
         height: 22px;
         flex-shrink: 0;
-        color: var(--accent);
+        display: none;
         transition: transform 180ms ease;
       }
 
@@ -134,11 +143,11 @@ export interface UiDropdownOption {
         right: 0;
         z-index: 2147483647;
         padding: 0.35rem;
-        border-radius: 10px;
+        border-radius: 12px;
         border: 1px solid var(--line);
-        background: color-mix(in srgb, var(--surface) 88%, transparent);
-        box-shadow: 0 20px 50px var(--shadow);
-        backdrop-filter: blur(18px);
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 24px 70px -30px rgba(10, 10, 10, 0.42);
+        backdrop-filter: blur(12px);
         max-height: 260px;
         overflow-y: auto;
         animation: dropdown-in 180ms ease both;
@@ -153,7 +162,7 @@ export interface UiDropdownOption {
         text-align: start;
         padding: 0.64rem 0.75rem;
         font-size: 0.92rem;
-        font-weight: 600;
+        font-weight: 750;
         transition:
           background-color 160ms ease,
           color 160ms ease;
@@ -162,7 +171,7 @@ export interface UiDropdownOption {
       .dropdown-option:hover,
       .dropdown-option.active {
         background: color-mix(in srgb, var(--accent) 12%, transparent);
-        color: var(--accent);
+        color: var(--luxury-black);
       }
 
       .dropdown-root.disabled {
@@ -186,6 +195,7 @@ export interface UiDropdownOption {
 export class UiDropdownComponent implements ControlValueAccessor {
   @Input() options: UiDropdownOption[] = [];
   @Input() placeholder = '';
+  @Input() ariaLabel = '';
 
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly ui = inject(UiPreferencesService);
@@ -238,6 +248,41 @@ export class UiDropdownComponent implements ControlValueAccessor {
     this.syncPanelElevation();
   }
 
+  handleTriggerKeydown(event: KeyboardEvent): void {
+    if (this.disabled) {
+      return;
+    }
+
+    if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
+      event.preventDefault();
+      this.open = true;
+      this.syncPanelElevation();
+      this.focusOptionForKey(event.key);
+    }
+  }
+
+  handleOptionKeydown(event: KeyboardEvent, value: string): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.selectOption(value);
+      this.focusTrigger();
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.open = false;
+      this.syncPanelElevation();
+      this.focusTrigger();
+      return;
+    }
+
+    if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
+      event.preventDefault();
+      this.focusOptionForKey(event.key, event.currentTarget as HTMLElement);
+    }
+  }
+
   selectOption(value: string): void {
     this.value = value;
     this.onChange(value);
@@ -286,5 +331,35 @@ export class UiDropdownComponent implements ControlValueAccessor {
       panel.style.zIndex = '2147483647';
       this.elevatedPanel = panel;
     }
+  }
+
+  private focusOptionForKey(key: string, currentOption?: HTMLElement): void {
+    requestAnimationFrame(() => {
+      const optionNodes = this.elementRef.nativeElement.querySelectorAll('.dropdown-option') as NodeListOf<HTMLElement>;
+      const options = Array.from(optionNodes);
+      if (!options.length) {
+        return;
+      }
+
+      const currentIndex = currentOption ? options.indexOf(currentOption) : options.findIndex((option) => option.classList.contains('active'));
+      const fallbackIndex = currentIndex >= 0 ? currentIndex : 0;
+      const nextIndex =
+        key === 'Home'
+          ? 0
+          : key === 'End'
+            ? options.length - 1
+            : key === 'ArrowUp'
+              ? Math.max(0, fallbackIndex - 1)
+              : Math.min(options.length - 1, fallbackIndex + 1);
+
+      options[nextIndex].focus();
+    });
+  }
+
+  private focusTrigger(): void {
+    requestAnimationFrame(() => {
+      const trigger = this.elementRef.nativeElement.querySelector('.dropdown-trigger') as HTMLButtonElement | null;
+      trigger?.focus();
+    });
   }
 }

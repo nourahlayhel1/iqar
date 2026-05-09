@@ -202,15 +202,11 @@
   "properties": {
     "advancedFilters": "Advanced filters",
     "addProperty": "Add Property",
-    "downloadTemplate": "Download Excel Template",
     "emptyState": "No properties found.",
     "eyebrow": "Properties",
     "filtersSubtitle": "",
     "filtersTitle": "Search",
     "foundSuffix": "properties found",
-    "importedCount": "Imported properties:",
-    "importExcel": "Import Excel",
-    "importingExcel": "Importing...",
     "subtitle": "",
     "title": "Properties"
   },

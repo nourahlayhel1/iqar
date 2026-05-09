@@ -24,13 +24,13 @@
 </ng-container>
 
 <ng-container *ngIf="!loading && property">
-  <section class="grid grid-2">
-    <div class="panel">
-      <div class="image-frame">
+  <section class="property-hero-grid">
+    <div class="panel property-media-panel">
+      <div class="image-frame property-cover-frame">
         <img [src]="property.coverImage || property.images[0] || 'https://placehold.co/900x600?text=Property'" [alt]="property.title">
       </div>
     </div>
-    <div class="panel hero">
+    <div class="panel hero property-summary-panel">
       <div class="eyebrow">{{ property.location.city }}</div>
       <h2>{{ property.title }}</h2>
       <div class="price">{{ formatCurrency(property.price, property.currency) }}</div>
@@ -42,7 +42,7 @@
         <span class="pill" *ngIf="showBathrooms(property)">{{ property.bathrooms }} {{ 'units.bathrooms' | translate }}</span>
         <span class="pill" *ngIf="property.areaSqm !== undefined">{{ property.areaSqm }} {{ 'units.sqm' | translate }}</span>
       </div>
-      <div class="toolbar">
+      <div class="detail-actions">
         <a [routerLink]="['/properties', property.id, 'edit']" class="btn-secondary">{{ 'common.edit' | translate }}</a>
         <button type="button" class="btn-danger" (click)="deleteProperty()">{{ 'common.delete' | translate }}</button>
       </div>

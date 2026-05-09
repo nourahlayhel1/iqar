@@ -17,46 +17,59 @@
     <div class="skeleton skeleton-field"></div>
   </div>
 
-  <form *ngIf="!loading || mode === 'create'" [formGroup]="form" (ngSubmit)="submit()" class="stack">
+  <form *ngIf="!loading || mode === 'create'" [formGroup]="form" (ngSubmit)="submit()" (keydown)="moveToNextField($event)" class="stack">
     <div class="form-grid">
-      <div><label class="label">{{ 'fields.title' | translate }}</label><input formControlName="title"></div>
-      <div><label class="label">{{ 'fields.type' | translate }}</label><app-ui-dropdown formControlName="type" [options]="typeOptions" /></div>
+      <div><label class="label" for="property-title">{{ 'fields.title' | translate }}</label><input id="property-title" formControlName="title" [attr.aria-label]="'fields.title' | translate"></div>
+      <div><label class="label" id="property-type-label">{{ 'fields.type' | translate }}</label><app-ui-dropdown formControlName="type" [options]="typeOptions" [ariaLabel]="'fields.type' | translate" /></div>
       <div>
-        <label class="label">{{ 'fields.price' | translate }}</label>
+        <label class="label" for="property-price">{{ 'fields.price' | translate }}</label>
         <div class="price-input">
           <span>$</span>
-          <input type="number" formControlName="price">
+          <input
+            id="property-price"
+            type="text"
+            inputmode="decimal"
+            [value]="priceDisplay"
+            (input)="updatePrice($event)"
+            [attr.aria-label]="'fields.price' | translate"
+          >
         </div>
       </div>
-      <div><label class="label">{{ 'fields.propertyNumber' | translate }}</label><input type="number" formControlName="propertyNumber"></div>
-      <div *ngIf="showLotNumber"><label class="label">{{ 'fields.lotNumber' | translate }}</label><input type="number" formControlName="lotNumber"></div>
-      <div><label class="label">{{ 'fields.purpose' | translate }}</label><app-ui-dropdown formControlName="purpose" [options]="purposeOptions" /></div>
-      <div><label class="label">{{ 'fields.source' | translate }}</label><app-ui-dropdown formControlName="source" [options]="sourceOptions" /></div>
-      <div formGroupName="location"><label class="label">{{ 'fields.city' | translate }}</label><input formControlName="city"></div>
-      <div formGroupName="location"><label class="label">{{ 'fields.area' | translate }}</label><input formControlName="area"></div>
-      <div formGroupName="location"><label class="label">{{ 'fields.addressLink' | translate }}</label><input formControlName="address"></div>
-      <div *ngIf="showBedrooms"><label class="label">{{ 'fields.bedrooms' | translate }}</label><input type="number" formControlName="bedrooms"></div>
-      <div *ngIf="showBathrooms"><label class="label">{{ 'fields.bathrooms' | translate }}</label><input type="number" formControlName="bathrooms"></div>
-      <div><label class="label">{{ 'fields.areaSqm' | translate }}</label><input type="number" formControlName="areaSqm"></div>
-      <div *ngIf="showFloor"><label class="label">{{ 'fields.floor' | translate }}</label><input type="number" formControlName="floor"></div>
+      <div><label class="label" for="property-number">{{ 'fields.propertyNumber' | translate }}</label><input id="property-number" type="number" formControlName="propertyNumber" [attr.aria-label]="'fields.propertyNumber' | translate"></div>
+      <div *ngIf="showLotNumber"><label class="label" for="property-lot-number">{{ 'fields.lotNumber' | translate }}</label><input id="property-lot-number" type="number" formControlName="lotNumber" [attr.aria-label]="'fields.lotNumber' | translate"></div>
+      <div><label class="label">{{ 'fields.purpose' | translate }}</label><app-ui-dropdown formControlName="purpose" [options]="purposeOptions" [ariaLabel]="'fields.purpose' | translate" /></div>
+      <div formGroupName="location"><label class="label" for="property-city">{{ 'fields.city' | translate }}</label><input id="property-city" formControlName="city" [attr.aria-label]="'fields.city' | translate"></div>
+      <div formGroupName="location"><label class="label" for="property-area">{{ 'fields.area' | translate }}</label><input id="property-area" formControlName="area" [attr.aria-label]="'fields.area' | translate"></div>
+      <div formGroupName="location"><label class="label" for="property-address">{{ 'fields.addressLink' | translate }}</label><input id="property-address" formControlName="address" [attr.aria-label]="'fields.addressLink' | translate"></div>
+      <div *ngIf="showBedrooms"><label class="label" for="property-bedrooms">{{ 'fields.bedrooms' | translate }}</label><input id="property-bedrooms" type="number" formControlName="bedrooms" [attr.aria-label]="'fields.bedrooms' | translate"></div>
+      <div *ngIf="showBathrooms"><label class="label" for="property-bathrooms">{{ 'fields.bathrooms' | translate }}</label><input id="property-bathrooms" type="number" formControlName="bathrooms" [attr.aria-label]="'fields.bathrooms' | translate"></div>
+      <div>
+        <label class="label" for="property-area-sqm">{{ 'fields.areaSqm' | translate }}</label>
+        <div class="unit-input">
+          <input id="property-area-sqm" type="number" formControlName="areaSqm" [attr.aria-label]="'fields.areaSqm' | translate">
+          <span>sqm</span>
+        </div>
+      </div>
+      <div *ngIf="showFloor"><label class="label" for="property-floor">{{ 'fields.floor' | translate }}</label><input id="property-floor" type="number" formControlName="floor" [attr.aria-label]="'fields.floor' | translate"></div>
+      <div><label class="label">{{ 'fields.source' | translate }}</label><app-ui-dropdown formControlName="source" [options]="sourceOptions" [ariaLabel]="'fields.source' | translate" /></div>
       <div>
         <label class="label">{{ contactModeLabel }}</label>
-        <app-ui-dropdown [ngModel]="contactMode" (ngModelChange)="setContactMode($event)" [options]="contactModeOptions" [ngModelOptions]="{ standalone: true }" />
+        <app-ui-dropdown [ngModel]="contactMode" (ngModelChange)="setContactMode($event)" [options]="contactModeOptions" [ariaLabel]="contactModeLabel" [ngModelOptions]="{ standalone: true }" />
       </div>
       <ng-container *ngIf="isExistingContactMode; else createContactFields">
-        <div><label class="label">{{ contactNameLabel }}</label><app-ui-dropdown formControlName="ownerId" [options]="ownerOptions" /></div>
-        <div><label class="label">{{ contactPhoneLabel }}</label><input formControlName="ownerPhone" readonly></div>
+        <div><label class="label">{{ contactNameLabel }}</label><app-ui-dropdown formControlName="ownerId" [options]="ownerOptions" [ariaLabel]="contactNameLabel" /></div>
+        <div><label class="label" for="property-owner-phone-readonly">{{ contactPhoneLabel }}</label><input id="property-owner-phone-readonly" formControlName="ownerPhone" readonly [attr.aria-label]="contactPhoneLabel"></div>
       </ng-container>
       <ng-template #createContactFields>
-        <div><label class="label">{{ contactNameLabel }}</label><input formControlName="ownerName"></div>
-        <div><label class="label">{{ contactPhoneLabel }}</label><input formControlName="ownerPhone"></div>
+        <div><label class="label" for="property-owner-name">{{ contactNameLabel }}</label><input id="property-owner-name" formControlName="ownerName" [attr.aria-label]="contactNameLabel"></div>
+        <div><label class="label" for="property-owner-phone">{{ contactPhoneLabel }}</label><input id="property-owner-phone" formControlName="ownerPhone" [attr.aria-label]="contactPhoneLabel"></div>
       </ng-template>
     </div>
 
-    <div><label class="label">{{ 'fields.description' | translate }}</label><textarea formControlName="description"></textarea></div>
+    <div><label class="label" for="property-description">{{ 'fields.description' | translate }}</label><textarea id="property-description" formControlName="description" [attr.aria-label]="'fields.description' | translate"></textarea></div>
     <div class="checkbox-grid">
       <label class="checkbox-item" *ngFor="let amenity of availableAmenities">
-        <input type="checkbox" [checked]="hasAmenity(amenity)" (change)="addAmenity(amenity, $any($event.target).checked)">
+        <input type="checkbox" [checked]="hasAmenity(amenity)" (change)="addAmenity(amenity, $any($event.target).checked)" [attr.aria-label]="'amenities.' + amenity | translate">
         <span>{{ 'amenities.' + amenity | translate }}</span>
       </label>
     </div>

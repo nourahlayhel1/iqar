@@ -1,25 +1,30 @@
 :root {
-  --background: #0a0a0a;
-  --surface: #161411;
-  --surface-panel:
-    linear-gradient(180deg, rgba(28, 25, 21, 0.92), rgba(14, 13, 12, 0.9));
-  --surface-soft: #211d17;
+  --luxury-black: #0a0a0a;
+  --luxury-charcoal: #1a1a1a;
+  --luxury-white: #fafaf8;
+  --luxury-stone: #e8e5e0;
+  --luxury-stone-dark: #8b867d;
+  --background: #fafaf8;
+  --surface: #ffffff;
+  --surface-panel: #ffffff;
+  --surface-soft: #f4f1ec;
   --secondary-surface: rgba(201, 169, 110, 0.1);
   --pill-surface: rgba(201, 169, 110, 0.12);
-  --hero-start: #12100d;
-  --hero-end: #0a0a0a;
-  --image-surface: #211d17;
-  --input-bg: rgba(250, 250, 248, 0.045);
-  --text: #fafaf8;
-  --muted: #a8a098;
-  --line: rgba(250, 250, 248, 0.12);
+  --hero-start: #fafaf8;
+  --hero-end: #f4f1ec;
+  --image-surface: #e8e5e0;
+  --input-bg: #ffffff;
+  --text: #1a1a1a;
+  --muted: #716d66;
+  --line: rgba(10, 10, 10, 0.11);
   --accent: #c9a96e;
-  --accent-dark: #ad8c4a;
-  --danger: #ff7676;
-  --danger-surface: rgba(255, 118, 118, 0.08);
-  --danger-line: rgba(255, 118, 118, 0.3);
-  --nav-bg: rgba(10, 10, 10, 0.9);
-  --shadow: rgba(0, 0, 0, 0.28);
+  --accent-dark: #9f7d3c;
+  --danger: #9d2323;
+  --danger-surface: #fff4f4;
+  --danger-line: rgba(157, 35, 35, 0.2);
+  --nav-bg: rgba(10, 10, 10, 0.96);
+  --shadow: 0 14px 42px -20px rgba(10, 10, 10, 0.22);
+  --shadow-hover: 0 24px 54px -24px rgba(10, 10, 10, 0.28);
 }
 
 $background: var(--background);
